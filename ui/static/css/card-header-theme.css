@@ -1,2 +1,73 @@
-/* placeholder theme css */
+/* Animated Radial Gradient for Card Headers (isolated)
+   Applies to Bootstrap-like card headers used across pages.
+   Safe: if custom properties registration is unsupported, it falls back to a static gradient.
+*/
 
+/* Custom property registration for smooth animation of percentage vars */
+@property --g2-1-x-position {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 87.96875%;
+}
+
+@property --g2-1-y-position {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 91.1328125%;
+}
+
+@property --g2-2-x-position {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 13.3984375%;
+}
+
+@property --g2-2-y-position {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: 82.734375%;
+}
+
+:root {
+    /* Starting positions (can be tweaked live) */
+    --g2-1-x-position: 87.96875%;
+    --g2-1-y-position: 91.1328125%;
+    --g2-2-x-position: 13.3984375%;
+    --g2-2-y-position: 82.734375%;
+
+    /* Theme hooks */
+    --card-header-base: #0f0f0f;
+    /* base underlay for dark theme */
+    --card-header-glow: #ffffff0d;
+    /* soft top-left glow */
+}
+
+/* Keyframes animating the CSS registered variables */
+@keyframes g-2 {
+    50% {
+        --g2-1-x-position: 15%;
+        --g2-1-y-position: 15%;
+        --g2-2-x-position: 61.2109375%;
+        --g2-2-y-position: 13.75%;
+    }
+}
+
+/* Apply to all card headers */
+.card .card-header {
+    /* The provided blended radial-gradients */
+    background:
+        radial-gradient(100% 100% at 4% 3%, var(--card-header-glow) 0%, transparent),
+        radial-gradient(100% 100% at var(--g2-1-x-position) var(--g2-1-y-position), #1d1ba7 -32%, transparent),
+        radial-gradient(100% 100% at var(--g2-2-x-position) var(--g2-2-y-position), #235fd7 0%, transparent),
+        var(--card-header-base);
+    animation: g-2 10s ease-in-out infinite;
+    background-blend-mode: screen, normal, normal, normal;
+    color: var(--text-primary);
+}
+
+/* Respect reduced-motion: keep static appearance */
+@media (prefers-reduced-motion: reduce) {
+    .card .card-header {
+        animation: none;
+    }
+}
