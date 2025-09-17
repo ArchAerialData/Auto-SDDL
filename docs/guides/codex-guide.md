@@ -237,7 +237,7 @@ def main():
     api = LocalAPI()
     html_path = os.path.abspath(os.path.join('ui', 'index.html'))
     window = webview.create_window('FormGen', html_path, js_api=api)
-    webview.start(gui='edgechromium', http_server=True)
+    webview.start(http_server=True)
 
 
 if __name__ == '__main__':
