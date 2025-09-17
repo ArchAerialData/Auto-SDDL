@@ -1,0 +1,80 @@
+name: build-release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        python: ['3.11']
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: pyinstaller --clean -y app.spec
+
+      # --- Windows packaging (ZIP using PowerShell Compress-Archive) ---
+      - name: Package Windows (ZIP)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          if (Test-Path 'dist\FormGen-windows.zip') { Remove-Item 'dist\FormGen-windows.zip' -Force }
+          Compress-Archive -Path 'dist\FormGen' -DestinationPath 'dist\FormGen-windows.zip' -Force
+
+      - name: Upload Windows artifact
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-artifact
+          path: dist/FormGen-windows.zip
+
+      # --- macOS packaging (DMG via hdiutil) ---
+      - name: Package macOS (DMG)
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          hdiutil create -volname 'FormGen' -srcfolder './dist/FormGen.app' -ov -format UDZO 'dist/FormGen-macos.dmg'
+
+      - name: Upload macOS artifact
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macOS-artifact
+          path: dist/FormGen-macos.dmg
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/**/FormGen-windows.zip
+            artifacts/**/FormGen-macos.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
