@@ -1,11 +1,18 @@
-# NEW_REPO_GUIDE
+# CODEX Guide — FormGen App (Refactored)
+
+> Path: `docs/guides/codex-guide.md`  
+> Purpose: Single, actionable guide to scaffold a **two‑tab** pywebview app and ship **.exe + .dmg** via GitHub Actions. This version **implements the “cleanest refactor”** discussed: PowerShell `Compress-Archive` on Windows, `hdiutil` on macOS, OS‑specific artifact names, and platform‑safe pywebview startup.
+
+---
 
 ## 1) Executive Summary
-- A small, local desktop app built with a Python backend (pywebview) and a simple HTML/CSS/JS UI. It has two screens: Form (fill fields and generate XLSX + DOCX) and Edit Forms (edit labels, required flags, options). It runs locally with a self-bootstrapping virtual environment and packages to platform-native binaries.
-- Platforms: Windows and macOS. Distribution artifacts: .exe and .dmg.
-- Not in scope: any legacy features from prior repos (clients/pilots/email/etc.). Keep scope tight and focused on form-driven generation.
+A small, local desktop app (Python + pywebview, HTML/CSS/JS UI) with two screens:  
+- **Form**: end‑user fills fields → generates **XLSX + DOCX**.  
+- **Edit Forms**: maintain the form schema (labels, required flags, types/options).
 
-## 2) Repo Layout (copy/paste tree)
+Targets **Windows** and **macOS**. CI builds **.exe** and **.dmg**. Self‑bootstrapping venv for local dev. Legacy features from other repos are out of scope.
+
+## 2) Repo Layout (copy/paste)
 ```
 formgen-app/
 ├─ app.py                      # pywebview entrypoint (window + js_api)
@@ -13,17 +20,17 @@ formgen-app/
 ├─ forms/
 │  └─ schema.json              # editable JSON that drives the form fields
 ├─ ui/
-│  ├─ index.html               # cloned visual shell: header + sidebar + 2 tabs
+│  ├─ index.html               # header + sidebar + two tabs
 │  ├─ js/
 │  │  ├─ api_bridge.js         # minimal bridge to Python API
-│  │  ├─ form.js               # logic for "Form" tab
-│  │  └─ edit_forms.js         # logic for "Edit Forms" tab
+│  │  ├─ form.js               # logic for “Form” tab
+│  │  └─ edit_forms.js         # logic for “Edit Forms” tab
 │  └─ static/
 │     ├─ css/                  # docker-theme.css, header-theme.css, sidebar-theme.css, utilities.css, card-header-theme.css
-│     ├─ images/               # logo(s) used by UI
+│     ├─ images/               # logo(s)
 │     └─ vendor/               # bootstrap, fontawesome (local with CDN fallback)
 ├─ templates/
-│  └─ docx_base_template.docx  # sample DOCX template (placeholder tags)
+│  └─ docx_base_template.docx  # sample DOCX template (optional placeholders {{field}})
 ├─ requirements.txt
 ├─ README.md
 ├─ LICENSE
@@ -34,211 +41,59 @@ formgen-app/
 │  └─ dev.ps1                  # create venv, install deps, run app (windows)
 └─ .github/
    └─ workflows/
-      └─ build-release.yml     # matrix build: windows exe + mac dmg
+      └─ build-release.yml     # matrix build: windows exe + mac dmg (refactored)
 ```
 
-> Instruction: Base the UI shell on your existing app’s patterns: `app.py` showing `webview.create_window(..., js_api=LocalAPI)` and `webview.start(...)`. Clone the HTML structure and theme includes from your current `index.html` (Bootstrap, FontAwesome, docker/header/sidebar themes, utilities, card-header animation). Keep only two sections and the sidebar with two items. The JS bridge should mirror your `js/api_bridge.js`, reduced to just this app’s endpoints. When a detail is not knowable from the source, mark it `TODO(Owner)`.
+> **UI cloning note:** Mirror the existing app’s HTML shell (header + sidebar) and the JS bridge pattern, but include **only two sections** and the corresponding sidebar items.
 
-## 3) GUI Scaffolding (what to copy and what to delete)
-- Keep: header bar, collapsible sidebar, typography, color theme files, and the section switching pattern from the current UI.
-- Remove: all legacy sections (reports, pilots, etc.).
-- Add:
-  - Sidebar items: “Form” and “Edit Forms”.
-  - Sections: `#form-section`, `#edit-forms-section` in `index.html`.
-  - Buttons: “Generate” (Form), “Save” (Edit Forms), “Open Output Folder”.
-- JS bridge: expose only the endpoints listed in Section 6 and wire listeners in `form.js` and `edit_forms.js`.
+## 3) GUI Scaffolding — What to keep, drop, add
+**Keep:** header bar, collapsible sidebar, theme CSS, and the “active section” switching pattern.  
+**Drop:** legacy sections/features not related to a two‑tab schema‑driven form generator.  
+**Add:** sidebar items `Form` and `Edit Forms`, with sections `#form-section` and `#edit-forms-section`. Buttons: **Generate**, **Save**, **Open Output Folder**.
 
-## 4) Data Model (forms/schema.json)
-- A single JSON file drives the UI fields and generation:
-```
+## 4) Form Schema (forms/schema.json)
+A minimal, durable schema example:
+```json
 {
-  "title": "Sample Form",
+  "title": "FormGen",
   "version": 1,
   "fields": [
-    { "key": "first_name", "label": "First Name", "type": "text", "required": true },
-    { "key": "last_name",  "label": "Last Name",  "type": "text", "required": true },
-    { "key": "age",        "label": "Age",        "type": "number", "required": false },
-    { "key": "status",     "label": "Status",     "type": "select", "options": ["Active","Inactive"], "required": true }
+    { "key": "site_name", "label": "Site Name", "type": "text", "required": true },
+    { "key": "inspection_date", "label": "Inspection Date", "type": "date", "required": true },
+    { "key": "inspector", "label": "Inspector", "type": "text", "required": true },
+    { "key": "priority", "label": "Priority", "type": "select", "options": ["Low", "Medium", "High"], "required": false },
+    { "key": "notes", "label": "Notes", "type": "textarea", "required": false }
   ]
 }
 ```
-- Owners can edit labels, required flags, and select options in the “Edit Forms” tab.
-- Add more forms as future work by extending structure to `{ forms: { name: schema } }`. For now, single form suffices.
+UI maps `type` → control: `text|number|date|textarea|select` (+ `options` for selects). Enforce `required` before generating.
 
-## 5) Minimal Dependencies
-Create `requirements.txt` with only what’s needed:
+## 5) Requirements (pin for PyInstaller stability)
 ```
 pywebview==4.4.1
 openpyxl==3.1.5
 python-docx==1.1.2
-# Optional (templated DOCX):
+# optional template path:
 # docxtpl==0.16.8
+pyinstaller==6.10.0
 ```
-- Windows requires Microsoft Edge WebView2 Runtime for pywebview (most systems have it; if not, installer link in Troubleshooting).
+- **Windows:** pywebview uses **WebView2** (install Evergreen runtime if the window is blank).  
+- **macOS:** uses built‑in WebKit.  
+- Use Python **3.10–3.12**.
 
-## 6) API Endpoints (LocalAPI)
-- `get_schema() -> dict`: Return current form schema.
-- `save_schema(schema: dict) -> bool`: Persist new schema to `forms/schema.json` (validate shape).
-- `generate_xlsx(data: dict, folder: str) -> str`: Append a row to `output.xlsx` (create if missing), return full path.
-- `generate_docx(data: dict, folder: str) -> str`: Render `templates/docx_base_template.docx` with fields, return full path. Use python-docx defaults; only use docxtpl if placeholders are present.
-- `open_folder(path: str) -> bool`: Open folder in Finder/Explorer using `subprocess`/`os.startfile`.
-
-## 7) Local Development (self-bootstrapping venv)
-Provide two scripts and document their behavior.
-
-`scripts/dev.sh`
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-cd "$(dirname "$0")/.."
-: "${PY:=python3}"
-if [ ! -d .venv ]; then $PY -m venv .venv; fi
-source .venv/bin/activate
-pip install -U pip
-pip install -r requirements.txt
-$PY app.py
-```
-
-`scripts/dev.ps1`
-```powershell
-Set-StrictMode -Version Latest
-$PSScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-Set-Location (Join-Path $PSScriptRoot "..")
-if (-not (Test-Path ".venv")) { py -m venv .venv }
-. .\.venv\Scripts\Activate.ps1
-python -m pip install -U pip
-python -m pip install -r requirements.txt
-python app.py
-```
-
-## 8) Packaging (PyInstaller) + Spec File
-Use a spec file so data inclusion is identical on both OSes. Include `app.spec` in the repo and call it in CI.
-
-```python
-# app.spec
-from PyInstaller.utils.hooks import collect_data_files
-datas = [
-    ('ui/index.html', 'ui'),
-    ('ui/static', 'ui/static'),
-    ('ui/js', 'ui/js'),
-    ('forms/schema.json', 'forms'),
-    ('templates', 'templates'),
-]
-
-block_cipher = None
-a = Analysis(
-    ['app.py'],
-    pathex=[],
-    binaries=[],
-    datas=datas,
-    hiddenimports=[],
-    noarchive=False
-)
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
-exe = EXE(pyz, a.scripts, a.binaries, a.zipfiles, a.datas,
-          name='FormGen',
-          console=False)
-app = BUNDLE(exe, name='FormGen.app', icon=None)  # macOS target
-```
-
-Local build commands:
-- Windows EXE: `pyinstaller --clean -y app.spec` (the EXE lands under `dist/FormGen/`)
-- macOS .app: same spec produces `dist/FormGen.app`; wrap to DMG (see Actions below).
-
-## 9) GitHub Actions (build + release EXE & DMG)
-Create `.github/workflows/build-release.yml` with a tag-triggered matrix build:
-
-```yaml
-name: build-release
-on:
-  push:
-    tags:
-      - 'v*'
-
-jobs:
-  build:
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest]
-        python: ['3.11']
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python }}
-
-      - name: Install dependencies
-        run: |
-          python -m pip install -U pip
-          pip install -r requirements.txt
-          pip install pyinstaller
-
-      - name: Build app with PyInstaller
-        run: |
-          pyinstaller --clean -y app.spec
-
-      - name: Package artifacts
-        shell: bash
-        run: |
-          if [[ "${{ runner.os }}" == "Windows" ]]; then
-            7z a FormGen.zip ./dist/FormGen/
-          else
-            hdiutil create -volname FormGen -srcfolder ./dist/FormGen.app FormGen.dmg
-          fi
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ runner.os }}-artifact
-          path: |
-            FormGen.zip
-            FormGen.dmg
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            artifacts/**/FormGen.zip
-            artifacts/**/FormGen.dmg
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-Notes:
-- Optional signing placeholders (future work):
-  - Windows: use `signtool` with `secrets.WIN_CERT_PFX` + `secrets.WIN_CERT_PASSWORD`.
-  - macOS: use `codesign` + notarization with Apple ID and app-specific password. Mark as TODO until certs available.
-
-## 10) Minimal Code Blocks (copy/paste)
-
+## 6) Python — Minimal LocalAPI (pywebview)
 `app.py`
 ```python
-import json
 import os
 import webview
 from api import LocalAPI
-
 
 def main():
     api = LocalAPI()
     html_path = os.path.abspath(os.path.join('ui', 'index.html'))
     window = webview.create_window('FormGen', html_path, js_api=api)
+    # NOTE: do not force a GUI backend (e.g., edgechromium); keep portable.
     webview.start(http_server=True)
-
 
 if __name__ == '__main__':
     main()
@@ -246,18 +101,13 @@ if __name__ == '__main__':
 
 `api.py`
 ```python
-import json
-import os
-import sys
-import subprocess
+import json, os, sys, subprocess
 from datetime import datetime
-
 from openpyxl import Workbook, load_workbook
 from docx import Document
 
 SCHEMA_PATH = os.path.join('forms', 'schema.json')
 TEMPLATES_DIR = 'templates'
-
 
 class LocalAPI:
     def get_schema(self):
@@ -273,42 +123,36 @@ class LocalAPI:
         return True
 
     def generate_xlsx(self, data, folder):
-        os.makedirs(folder, exist_ok=True)
-        xlsx_path = os.path.join(folder, 'output.xlsx')
+        os.makedirs(folder or '.', exist_ok=True)
+        xlsx_path = os.path.join(folder or '.', 'output.xlsx')
         if os.path.exists(xlsx_path):
-            wb = load_workbook(xlsx_path)
-            ws = wb.active
+            wb = load_workbook(xlsx_path); ws = wb.active
         else:
-            wb = Workbook()
-            ws = wb.active
-            # header row from keys
-            ws.append(list(data.keys()))
+            wb = Workbook(); ws = wb.active; ws.append(list(data.keys()))
         ws.append([data.get(k, '') for k in ws[1]])
         wb.save(xlsx_path)
         return os.path.abspath(xlsx_path)
 
     def generate_docx(self, data, folder):
-        os.makedirs(folder, exist_ok=True)
-        docx_path = os.path.join(folder, 'output.docx')
+        os.makedirs(folder or '.', exist_ok=True)
+        docx_path = os.path.join(folder or '.', 'output.docx')
         template = os.path.join(TEMPLATES_DIR, 'docx_base_template.docx')
         if os.path.exists(template):
-            # Simple placeholder replacement using python-docx paragraphs
             doc = Document(template)
             for p in doc.paragraphs:
                 for k, v in data.items():
                     p.text = p.text.replace(f'{{{{{k}}}}}', str(v))
         else:
-            doc = Document()
-            doc.add_heading('Form Output', level=1)
-            for k, v in data.items():
-                doc.add_paragraph(f"{k}: {v}")
+            doc = Document(); doc.add_heading('Form Output', level=1)
+            for k, v in data.items(): doc.add_paragraph(f"{k}: {v}")
         doc.add_paragraph(f"Generated: {datetime.now().isoformat(timespec='seconds')}")
         doc.save(docx_path)
         return os.path.abspath(docx_path)
 
     def open_folder(self, path):
+        path = os.path.abspath(path or '.')
         if sys.platform.startswith('win'):
-            os.startfile(os.path.abspath(path))  # type: ignore[attr-defined]
+            os.startfile(path)  # type: ignore[attr-defined]
         elif sys.platform == 'darwin':
             subprocess.call(['open', path])
         else:
@@ -316,87 +160,82 @@ class LocalAPI:
         return True
 ```
 
-`ui/index.html`
+## 7) UI — Shell + Bridge (two tabs)
+`ui/index.html` (skeleton)
 ```html
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FormGen</title>
-    <!-- Vendor CSS (local first, CDN fallback) -->
-    <link rel="stylesheet" href="static/vendor/bootstrap.min.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'">
-    <link rel="stylesheet" href="static/vendor/fontawesome.min.css">
-    <!-- Theme CSS -->
-    <link rel="stylesheet" href="static/css/docker-theme.css">
-    <link rel="stylesheet" href="static/css/header-theme.css">
-    <link rel="stylesheet" href="static/css/sidebar-theme.css">
-    <link rel="stylesheet" href="static/css/utilities.css">
-    <link rel="stylesheet" href="static/css/card-header-theme.css">
-  </head>
-  <body>
-    <header class="p-2 border-bottom d-flex align-items-center">
-      <img src="static/images/logo.png" alt="Logo" height="28" onerror="this.style.display='none'">
-      <h1 class="h5 ms-2 mb-0">FormGen</h1>
-    </header>
-    <div class="d-flex" style="height: calc(100vh - 48px);">
-      <nav id="sidebar" class="border-end p-2" style="width: 220px;">
-        <ul class="nav flex-column">
-          <li class="nav-item"><a class="nav-link active" href="#" data-target="form-section">Form</a></li>
-          <li class="nav-item"><a class="nav-link" href="#" data-target="edit-forms-section">Edit Forms</a></li>
-        </ul>
-      </nav>
-      <main class="flex-fill p-3 overflow-auto">
-        <section id="form-section">
-          <div class="card">
-            <div class="card-header">Fill Form</div>
-            <div class="card-body">
-              <form id="dynamic-form" class="vstack gap-2"></form>
-              <div class="d-flex gap-2 mt-3">
-                <input type="text" id="output-folder" class="form-control" placeholder="Output folder (optional)" />
-                <button id="btn-generate" class="btn btn-primary">Generate</button>
-                <button id="btn-open-folder" class="btn btn-outline-secondary">Open Output Folder</button>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section id="edit-forms-section" hidden>
-          <div class="card">
-            <div class="card-header">Edit Form Schema</div>
-            <div class="card-body">
-              <textarea id="schema-editor" class="form-control" rows="16" spellcheck="false"></textarea>
-              <div class="d-flex gap-2 mt-3">
-                <button id="btn-save-schema" class="btn btn-success">Save</button>
-                <button id="btn-revert-schema" class="btn btn-outline-secondary">Revert</button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FormGen</title>
+  <!-- Local first, CDN fallback -->
+  <link rel="stylesheet" href="static/vendor/bootstrap.min.css"
+        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css'">
+  <link rel="stylesheet" href="static/vendor/fontawesome.min.css">
+  <link rel="stylesheet" href="static/css/docker-theme.css">
+  <link rel="stylesheet" href="static/css/header-theme.css">
+  <link rel="stylesheet" href="static/css/sidebar-theme.css">
+  <link rel="stylesheet" href="static/css/utilities.css">
+  <link rel="stylesheet" href="static/css/card-header-theme.css">
+</head>
+<body>
+  <header class="p-2 border-bottom d-flex align-items-center">
+    <img src="static/images/logo.png" alt="" height="28" onerror="this.style.display='none'">
+    <h1 class="h5 ms-2 mb-0">FormGen</h1>
+  </header>
 
-    <script src="js/api_bridge.js"></script>
-    <script src="js/form.js"></script>
-    <script src="js/edit_forms.js"></script>
-  </body>
-  </html>
+  <div class="d-flex" style="height: calc(100vh - 48px);">
+    <nav id="sidebar" class="border-end p-2" style="width: 220px;">
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link active" href="#" data-target="form-section">Form</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-target="edit-forms-section">Edit Forms</a></li>
+      </ul>
+    </nav>
+    <main class="flex-fill p-3 overflow-auto">
+      <section id="form-section">
+        <div class="card">
+          <div class="card-header">Fill Form</div>
+          <div class="card-body">
+            <form id="dynamic-form" class="vstack gap-2"></form>
+            <div class="d-flex gap-2 mt-3">
+              <input type="text" id="output-folder" class="form-control" placeholder="Output folder (optional)">
+              <button id="btn-generate" class="btn btn-primary">Generate</button>
+              <button id="btn-open-folder" class="btn btn-outline-secondary">Open Output Folder</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="edit-forms-section" hidden>
+        <div class="card">
+          <div class="card-header">Edit Form Schema</div>
+          <div class="card-body">
+            <textarea id="schema-editor" class="form-control" rows="16" spellcheck="false"></textarea>
+            <div class="d-flex gap-2 mt-3">
+              <button id="btn-save-schema" class="btn btn-success">Save</button>
+              <button id="btn-revert-schema" class="btn btn-outline-secondary">Revert</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/api_bridge.js"></script>
+  <script src="js/form.js"></script>
+  <script src="js/edit_forms.js"></script>
+</body>
+</html>
 ```
 
 `ui/js/api_bridge.js`
 ```javascript
 (function () {
-  function hasPywebview() {
-    return typeof window.pywebview !== 'undefined' && window.pywebview.api;
-  }
-
+  function hasPywebview() { return typeof window.pywebview !== 'undefined' && window.pywebview.api; }
   async function call(name, ...args) {
-    if (hasPywebview()) {
-      return await window.pywebview.api[name](...args);
-    }
-    // Dev fallback (serve via http_server=True): POST to /api if you wire one
+    if (hasPywebview()) return await window.pywebview.api[name](...args);
     throw new Error('API bridge not available');
   }
-
   window.API = {
     get_schema: () => call('get_schema'),
     save_schema: (schema) => call('save_schema', schema),
@@ -404,10 +243,7 @@ class LocalAPI:
     generate_docx: (data, folder) => call('generate_docx', data, folder || ''),
     open_folder: (folder) => call('open_folder', folder)
   };
-
-  document.addEventListener('pywebviewready', () => {
-    console.log('pywebview ready');
-  });
+  document.addEventListener('pywebviewready', () => console.log('pywebview ready'));
 })();
 ```
 
@@ -419,43 +255,33 @@ class LocalAPI:
   const btnGen = document.getElementById('btn-generate');
   const btnOpen = document.getElementById('btn-open-folder');
 
-  function switchTo(id) {
-    for (const sec of document.querySelectorAll('main > section')) {
-      sec.hidden = sec.id !== id;
-    }
-    for (const a of document.querySelectorAll('#sidebar a')) {
-      a.classList.toggle('active', a.dataset.target === id);
-    }
-  }
-
+  // Simple sidebar switching
   document.querySelectorAll('#sidebar a').forEach(a => {
-    a.addEventListener('click', (e) => { e.preventDefault(); switchTo(a.dataset.target); });
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const id = a.dataset.target;
+      document.querySelectorAll('main > section').forEach(sec => sec.hidden = sec.id !== id);
+      document.querySelectorAll('#sidebar a').forEach(x => x.classList.toggle('active', x === a));
+    });
   });
 
   function renderField(f) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'vstack gap-1';
+    const wrap = document.createElement('div'); wrap.className = 'vstack gap-1';
     const label = document.createElement('label');
     label.textContent = f.label + (f.required ? ' *' : '');
     label.htmlFor = f.key;
     let input;
     if (f.type === 'select') {
       input = document.createElement('select');
-      (f.options || []).forEach(opt => {
-        const o = document.createElement('option');
-        o.value = o.textContent = opt;
-        input.appendChild(o);
-      });
+      (f.options || []).forEach(opt => { const o = document.createElement('option'); o.value = o.textContent = opt; input.appendChild(o); });
+    } else if (f.type === 'textarea') {
+      input = document.createElement('textarea'); input.rows = 3;
     } else {
-      input = document.createElement('input');
-      input.type = f.type || 'text';
+      input = document.createElement('input'); input.type = f.type || 'text';
     }
-    input.id = f.key;
-    input.required = !!f.required;
-    input.className = 'form-control';
-    wrapper.appendChild(label);
-    wrapper.appendChild(input);
-    return wrapper;
+    input.id = f.key; input.required = !!f.required; input.className = 'form-control';
+    wrap.appendChild(label); wrap.appendChild(input);
+    return wrap;
   }
 
   async function loadSchema() {
@@ -467,9 +293,7 @@ class LocalAPI:
   btnGen.addEventListener('click', async (e) => {
     e.preventDefault();
     const data = {};
-    formEl.querySelectorAll('input,select,textarea').forEach(el => {
-      data[el.id] = el.value;
-    });
+    formEl.querySelectorAll('input,select,textarea').forEach(el => { data[el.id] = el.value; });
     const folder = outputEl.value || '';
     const x = await window.API.generate_xlsx(data, folder);
     const d = await window.API.generate_docx(data, folder);
@@ -514,33 +338,165 @@ class LocalAPI:
 })();
 ```
 
-## 11) End-to-End Smoke Test
-- Edit `forms/schema.json` and add a field.
-- Run `scripts/dev.sh` or `scripts/dev.ps1` and confirm the UI shows the new field.
-- Fill the form, pick an output folder (optional), click Generate.
-- Verify `output.xlsx` (row appended) and `output.docx` (fields rendered).
-- Click “Open Output Folder” to open the folder in Finder/Explorer.
+## 8) Local Development (self‑bootstrapping venv)
+`scripts/dev.sh`
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+: "${PY:=python3}"
+if [ ! -d .venv ]; then $PY -m venv .venv; fi
+source .venv/bin/activate
+pip install -U pip
+pip install -r requirements.txt
+$PY app.py
+```
 
-## 12) Troubleshooting & Edge Cases
-- Windows blank window: install WebView2 Runtime (https://developer.microsoft.com/en-us/microsoft-edge/webview2/).
-- Bundled static assets missing: verify `app.spec` `datas` entries and relative paths.
-- DOCX template issues: python-docx writes plain text by default; only enable docxtpl if you add Jinja-like placeholders.
-- Antivirus false positives: prefer signed installers in future.
-- Apple notarization: document Apple ID and app-specific password (future work).
+`scripts/dev.ps1`
+```powershell
+Set-StrictMode -Version Latest
+$PSScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location (Join-Path $PSScriptRoot "..")
+if (-not (Test-Path ".venv")) { py -m venv .venv }
+. .\.venv\Scripts\Activate.ps1
+python -m pip install -U pip
+python -m pip install -r requirements.txt
+python app.py
+```
+
+## 9) Packaging — PyInstaller + Spec
+`app.spec`
+```python
+# app.spec
+datas = [
+    ('ui/index.html', 'ui'),
+    ('ui/static', 'ui/static'),
+    ('ui/js', 'ui/js'),
+    ('forms/schema.json', 'forms'),
+    ('templates', 'templates'),
+]
+
+block_cipher = None
+a = Analysis(['app.py'], pathex=[], binaries=[], datas=datas, hiddenimports=[], noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+exe = EXE(pyz, a.scripts, a.binaries, a.zipfiles, a.datas, name='FormGen', console=False)
+app = BUNDLE(exe, name='FormGen.app', icon=None)  # macOS target
+```
+
+Local builds:  
+- **Windows**: `pyinstaller --clean -y app.spec` → `dist/FormGen/FormGen.exe`  
+- **macOS**: same → `dist/FormGen.app`
+
+## 10) GitHub Actions — **Refactored** matrix (.exe + .dmg)
+Create `.github/workflows/build-release.yml`:
+
+```yaml
+name: build-release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        python: ['3.11']
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: pyinstaller --clean -y app.spec
+
+      # --- Windows packaging (ZIP using PowerShell Compress-Archive) ---
+      - name: Package Windows (ZIP)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          if (Test-Path 'dist\FormGen-windows.zip') { Remove-Item 'dist\FormGen-windows.zip' -Force }
+          Compress-Archive -Path 'dist\FormGen' -DestinationPath 'dist\FormGen-windows.zip' -Force
+
+      - name: Upload Windows artifact
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-artifact
+          path: dist/FormGen-windows.zip
+
+      # --- macOS packaging (DMG via hdiutil) ---
+      - name: Package macOS (DMG)
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          hdiutil create -volname 'FormGen' -srcfolder './dist/FormGen.app' -ov -format UDZO 'dist/FormGen-macos.dmg'
+
+      - name: Upload macOS artifact
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macOS-artifact
+          path: dist/FormGen-macos.dmg
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/**/FormGen-windows.zip
+            artifacts/**/FormGen-macos.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+**Why this is cleaner**
+- No external 7‑Zip dependency.  
+- Clear, OS‑specific artifact names → simpler release globs.  
+- macOS uses native `hdiutil` (no `brew install create-dmg`).
+
+## 11) Smoke Test
+1. Edit `forms/schema.json` → add a field.  
+2. Run `scripts/dev.*` → confirm UI shows the field.  
+3. Fill the form → **Generate** → verify `output.xlsx` and `output.docx`.  
+4. **Open Output Folder** → ensure it opens in Finder/Explorer.  
+
+## 12) Troubleshooting
+- **Blank window on Windows** → install WebView2 Runtime (Evergreen).  
+- **Missing assets in build** → check `app.spec` `datas` list.  
+- **DOCX template issues** → start with plain python‑docx; enable templating later.  
+- **AV false positives** → plan for signed installers.  
+- **Apple notarization** → future: `codesign` + notarization with secrets.
 
 ## 13) Roadmap (Optional)
-- Multiple form packs (per client) via `{ forms: { name: schema } }`.
-- Built-in WebView2 bootstrap step for Windows.
-- Signed MSI + signed DMG.
-- Auto-update channel.
+- Multiple forms / profiles.  
+- WebView2 bootstrap installer step on Windows.  
+- Code signing (Windows) & notarization (macOS).  
+- Auto‑update channel.
 
-## 14) License & Attribution
-- Confirm license for any copied UI assets and icons.
-- Include third-party licenses for Bootstrap/FontAwesome.
-
----
-
-## Appendix A: .gitignore (starter)
+## Appendix: .gitignore (starter)
 ```
 .venv/
 dist/
@@ -553,20 +509,6 @@ __pycache__/
 *.exe
 ```
 
-## Appendix B: README (starter)
-```
-# FormGen
+---
 
-Local desktop app (pywebview) for filling a form and generating XLSX + DOCX. Includes packaging via GitHub Actions for Windows (.exe) and macOS (.dmg).
-
-## Quickstart
-scripts/dev.ps1   # Windows
-scripts/dev.sh    # macOS/Linux
-
-## Build Locally
-pyinstaller --clean -y app.spec
-
-## License
-TODO(Owner)
-```
-
+**Hand‑off note:** Follow with the companion prompt file at `docs/prompts/prompt.md` for agent instructions.

@@ -1,0 +1,7 @@
+pywebview==4.4.1
+openpyxl==3.1.5
+python-docx==1.1.2
+# optional template path:
+# docxtpl==0.16.8
+pyinstaller==6.10.0
+

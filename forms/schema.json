@@ -1,0 +1,12 @@
+{
+  "title": "FormGen",
+  "version": 1,
+  "fields": [
+    { "key": "site_name", "label": "Site Name", "type": "text", "required": true },
+    { "key": "inspection_date", "label": "Inspection Date", "type": "date", "required": true },
+    { "key": "inspector", "label": "Inspector", "type": "text", "required": true },
+    { "key": "priority", "label": "Priority", "type": "select", "options": ["Low", "Medium", "High"], "required": false },
+    { "key": "notes", "label": "Notes", "type": "textarea", "required": false }
+  ]
+}
+
