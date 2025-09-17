@@ -39,10 +39,20 @@ When ready, wait for my confirmation to continue with **Tasks 6–10** in the gu
 - **Artifacts & docs.** For each phase, produce a `docs/tasks/*.md` report with: what you did, how it works, and how you verified it.
 
 ---
-
-## Prompts for Later Phases
-
 ### Continue to Tasks 6–10 (after approval)
+
+#### Preconditions (read-only checks)
+
+Confirm these already exist from Tasks 1–5 (do not modify unless noted):
+- `app.py` uses a **portable** pywebview start (`webview.start(http_server=True)`). 
+- `api.py` exposes the minimal endpoints (`get_schema`, `save_schema`, `generate_xlsx`, `generate_docx`, `open_folder`). 
+- `forms/schema.json` contains the initial fields for the form UI.  
+- `scripts/dev.sh` and `scripts/dev.ps1` exist for local runs. 
+- `requirements.txt` pins `pywebview`, `openpyxl`, `python-docx`, and `pyinstaller`.  
+- Tasks 1–5 completion is recorded in `docs/tasks/Task-01_to_05.md`. 
+
+##### If any are missing, recreate them exactly as referenced, then continue with steps 6-10 below
+
 Read `docs/guides/codex-guide.md` and implement **Tasks 6–10** only:
 - Add `app.spec` exactly as shown.
 - Create `.github/workflows/build-release.yml` using PowerShell `Compress-Archive` on Windows and `hdiutil` on macOS, with OS‑specific artifact names:
@@ -66,4 +76,4 @@ Perform a quick hardening pass and document in `docs/tasks/Task-11_hardening.md`
 - App runs locally from `scripts/dev.*` on both platforms.  
 - Filling the form generates valid **XLSX + DOCX**.  
 - CI produces **FormGen-windows.zip** and **FormGen-macos.dmg** on tag push.  
-- Task reports are present under `docs/tasks/` and are legible by a new engineer.
+- Task reports for tasks 6-10 are present under `docs/tasks/` and are legible by a new engineer.
