@@ -15,19 +15,22 @@
   <link rel="stylesheet" href="static/css/card-header-theme.css">
 </head>
 <body>
-  <header class="p-2 border-bottom d-flex align-items-center">
-    <img src="static/images/logo.png" alt="" height="28" onerror="this.style.display='none'">
-    <h1 class="h5 ms-2 mb-0">FormGen</h1>
+  <header class="p-2 border-bottom d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <button id="sidebarToggle" class="btn btn-outline-secondary btn-sm me-2" title="Toggle sidebar">☰</button>
+      <img src="static/images/logo.png" alt="" height="28" onerror="this.style.display='none'">
+      <h1 class="h5 ms-2 mb-0 brand-text">FormGen</h1>
+    </div>
   </header>
 
   <div class="d-flex" style="height: calc(100vh - 48px);">
-    <nav id="sidebar" class="border-end p-2" style="width: 220px;">
+    <nav id="sidebar" class="sidebar border-end p-2" style="width: 220px;">
       <ul class="nav flex-column">
-        <li class="nav-item"><a class="nav-link active" href="#" data-target="form-section">Form</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" data-target="edit-forms-section">Edit Forms</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#" data-target="form-section"><span>Form</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="#" data-target="edit-forms-section"><span>Edit Forms</span></a></li>
       </ul>
     </nav>
-    <main class="flex-fill p-3 overflow-auto">
+    <main class="main-content flex-fill p-3 overflow-auto">
       <section id="form-section">
         <div class="card">
           <div class="card-header">Fill Form</div>
@@ -59,6 +62,6 @@
   <script src="js/api_bridge.js"></script>
   <script src="js/form.js"></script>
   <script src="js/edit_forms.js"></script>
+  <script src="static/js/sidebar.js"></script>
 </body>
 </html>
-
