@@ -19,6 +19,14 @@
     const wrap = document.createElement('div'); wrap.className = 'vstack gap-1';
     const label = document.createElement('label');
     label.textContent = f.label + (f.required ? ' *' : '');
+    // Add a clear required badge for specific AP fields
+    if (f.required && (f.key === 'ap_email' || f.key === 'ap_phone_number')) {
+      const note = document.createElement('span');
+      note.className = 'required-note';
+      note.textContent = 'FIELD IS REQUIRED, YOU DIRTY PIGS';
+      label.appendChild(document.createTextNode(' '));
+      label.appendChild(note);
+    }
     label.htmlFor = f.key;
     let input;
     if (f.type === 'select') {

@@ -6,7 +6,7 @@
       "key": "client_name",
       "label": "Client Name",
       "type": "text",
-      "required": false
+      "required": true
     },
     {
       "key": "project_name",
@@ -20,13 +20,13 @@
       "type": "multiselect",
       "options": [],
       "allow_custom": true,
-      "required": false
+      "required": true
     },
     {
       "key": "watermarks",
       "label": "Watermarks",
       "type": "text",
-      "required": false
+      "required": true
     },
     {
       "key": "upload_deliverables",
@@ -34,13 +34,13 @@
       "type": "multiselect",
       "options": ["Dropbox", "Procore", "DroneDeploy", "Drone Work Advisor"],
       "allow_custom": true,
-      "required": false
+      "required": true
     },
     {
       "key": "email_distribution_list",
       "label": "Email Distribution List",
       "type": "text",
-      "required": false
+      "required": true
     },
     {
       "key": "primary_contact_name",
@@ -71,25 +71,25 @@
       "label": "Project Frequency",
       "type": "select",
       "options": ["One-Time", "Weekly", "Bi-Weekly", "Monthly", "Quarterly", "Annual"],
-      "required": false
+      "required": true
     },
     {
       "key": "project_duration",
       "label": "Project Duration",
       "type": "text",
-      "required": false
+      "required": true
     },
     {
       "key": "ap_email",
       "label": "AP Email",
       "type": "text",
-      "required": false
+      "required": true
     },
     {
       "key": "ap_phone_number",
       "label": "AP Phone Number",
       "type": "text",
-      "required": false
+      "required": true
     }
   ],
   "xlsx": {

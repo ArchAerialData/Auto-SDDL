@@ -404,6 +404,12 @@ label {
     color: var(--text-primary) !important;
 }
 
+/* Red bold badge for explicit required notes */
+.required-note {
+    color: #ef4444;
+    font-weight: 700;
+}
+
 .form-control,
 .form-select {
     /* Slightly lighter than card background for clearer contrast */
