@@ -223,3 +223,106 @@ class LocalAPI:
         else:
             subprocess.call(['xdg-open', path])
         return True
+
+    # --- Schema utilities ---
+    def _detect_xlsx_template(self):
+        try:
+            xlsx_files = [f for f in os.listdir(TEMPLATES_DIR) if f.lower().endswith('.xlsx')]
+        except FileNotFoundError:
+            xlsx_files = []
+        if len(xlsx_files) == 1:
+            return os.path.join(TEMPLATES_DIR, xlsx_files[0])
+        if len(xlsx_files) > 1:
+            preferred = [
+                'xlsx_template.xlsx', 'table.xlsx', 'single-row-template.xlsx', 'sddl-template-header-fields.xlsx'
+            ]
+            lower_map = {f.lower(): f for f in xlsx_files}
+            for name in preferred:
+                if name in lower_map:
+                    return os.path.join(TEMPLATES_DIR, lower_map[name])
+            return os.path.join(TEMPLATES_DIR, sorted(xlsx_files, key=lambda s: s.lower())[0])
+        return None
+
+    def _headers_from_template(self):
+        template = self._detect_xlsx_template()
+        if not template or not os.path.exists(template):
+            return []
+        try:
+            from openpyxl import load_workbook
+            wb = load_workbook(template)
+            ws = wb.active
+            headers = [c.value if c.value is not None else '' for c in ws[1]]
+            # trim trailing empties
+            while headers and (headers[-1] is None or str(headers[-1]).strip() == ''):
+                headers.pop()
+            headers = [str(h).strip() for h in headers if str(h).strip()]
+            return headers
+        except Exception:
+            return []
+
+    def propose_schema_from_template(self):
+        """Return a proposed schema based on the XLSX template headers.
+
+        - Preserves existing field configs when labels/keys match headers.
+        - Adds new text fields for new headers.
+        - Keeps unmatched existing fields out of the active list but reports them in meta.unmapped.
+        - Increments version.
+        """
+        headers = self._headers_from_template()
+        current = {}
+        try:
+            current = self.get_schema()
+        except Exception:
+            current = {}
+
+        existing_fields = current.get('fields', []) if isinstance(current, dict) else []
+        by_label = {str(f.get('label', '')).strip().lower(): f for f in existing_fields if isinstance(f, dict)}
+        by_key = {str(f.get('key', '')).strip().lower(): f for f in existing_fields if isinstance(f, dict)}
+
+        def to_key(name: str) -> str:
+            import re
+            s = re.sub(r'[^0-9A-Za-z]+', '_', name).strip('_').lower()
+            s = re.sub(r'_+', '_', s)
+            return s or 'field'
+
+        proposed_fields = []
+        used = set()
+        for h in headers:
+            h_norm = str(h).strip()
+            f = by_label.get(h_norm.lower()) or by_key.get(to_key(h_norm))
+            if f:
+                # clone to avoid mutating original
+                nf = dict(f)
+                nf['label'] = h_norm
+                # keep existing key/type/options
+                proposed_fields.append(nf)
+                used.add(id(f))
+            else:
+                proposed_fields.append({
+                    'key': to_key(h_norm),
+                    'label': h_norm,
+                    'type': 'text',
+                    'required': False
+                })
+
+        # Unmapped existing fields (not in headers)
+        unmapped = []
+        for f in existing_fields:
+            if id(f) not in used:
+                unmapped.append({'key': f.get('key'), 'label': f.get('label')})
+
+        # Version bump
+        ver = current.get('version', 1)
+        try:
+            ver = int(ver) + 1
+        except Exception:
+            ver = 1
+
+        proposed = {
+            'title': current.get('title', 'FormGen'),
+            'version': ver,
+            'fields': proposed_fields,
+            'xlsx': current.get('xlsx', {'row_strategy': 'single_row', 'email_delimiter': ';'}),
+            'meta': { 'unmapped': unmapped, 'source': 'xlsx_template_headers' }
+        }
+        return proposed
