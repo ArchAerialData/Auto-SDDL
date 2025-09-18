@@ -50,6 +50,12 @@ jobs:
             pyinstaller --clean -y app.spec
           fi
 
+      # Additional macOS build for older Intel Macs (x86_64)
+      - name: Build macOS x86_64 (PyInstaller)
+        if: matrix.os == 'macos-latest'
+        run: |
+          pyinstaller --clean -y --target-arch x86_64 --distpath dist-x64 --workpath build-x64 app.spec
+
       # --- Windows packaging (ZIP using PowerShell Compress-Archive) ---
       - name: Package Windows (ZIP)
         if: matrix.os == 'windows-latest'
@@ -95,6 +101,26 @@ jobs:
           name: macOS-artifact
           path: dist/SDDL-DS-macos.dmg
 
+      # Package Intel-only DMG from x64 dist
+      - name: Package macOS x86_64 (DMG)
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          APP_DIR_X64="./dist-x64/SDDL-DS.app"
+          if [ ! -e "$APP_DIR_X64" ]; then
+            ALT_APP_X64="./dist-x64/SDDL-DS"
+            if [ -d "$ALT_APP_X64" ]; then APP_DIR_X64="$ALT_APP_X64"; else ls -laR ./dist-x64 || true; echo "No SDDL-DS.app in dist-x64"; exit 1; fi
+          fi
+          hdiutil create -volname 'SDDL-DS' -srcfolder "$APP_DIR_X64" -ov -format UDZO 'dist/SDDL-DS-macos-x64.dmg'
+
+      - name: Upload macOS x86_64 artifact
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macOS-x64-artifact
+          path: dist/SDDL-DS-macos-x64.dmg
+
   release:
     needs: build
     if: github.event_name == 'release'
@@ -111,5 +137,6 @@ jobs:
           files: |
             artifacts/**/SDDL-DS-windows.zip
             artifacts/**/SDDL-DS-macos.dmg
+            artifacts/**/SDDL-DS-macos-x64.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
