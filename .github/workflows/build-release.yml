@@ -42,19 +42,26 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Build with PyInstaller
+      - name: Build with PyInstaller (native arch)
         run: |
-          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            pyinstaller --clean -y --target-arch universal2 app.spec
-          else
-            pyinstaller --clean -y app.spec
-          fi
+          pyinstaller --clean -y app.spec
 
       # Additional macOS build for older Intel Macs (x86_64)
-      - name: Build macOS x86_64 (PyInstaller)
+      - name: Build macOS x86_64 (makespec + build)
         if: matrix.os == 'macos-latest'
         run: |
-          pyinstaller --clean -y --target-arch x86_64 --distpath dist-x64 --workpath build-x64 app.spec
+          set -euxo pipefail
+          # Generate a temporary spec targeting x86_64 with required datas
+          pyi-makespec --windowed \
+            --name SDDL-DS \
+            --target-arch x86_64 \
+            --add-data "ui/index.html:ui" \
+            --add-data "ui/static:ui/static" \
+            --add-data "ui/js:ui/js" \
+            --add-data "forms/schema.json:forms" \
+            --add-data "templates:templates" \
+            app.py
+          pyinstaller --clean -y --distpath dist-x64 --workpath build-x64 SDDL-DS.spec
 
       # --- Windows packaging (ZIP using PowerShell Compress-Archive) ---
       - name: Package Windows (ZIP)
@@ -81,7 +88,7 @@ jobs:
           path: dist/SDDL-DS-windows.zip
 
       # --- macOS packaging (DMG via hdiutil) ---
-      - name: Package macOS (DMG)
+      - name: Package macOS (DMG, native)
         if: matrix.os == 'macos-latest'
         shell: bash
         run: |
@@ -92,14 +99,14 @@ jobs:
             ALT_APP="./dist/SDDL-DS"
             if [ -d "$ALT_APP" ]; then APP_DIR="$ALT_APP"; else ls -laR ./dist; echo "No FormGen.app found"; exit 1; fi
           fi
-          hdiutil create -volname 'SDDL-DS' -srcfolder "$APP_DIR" -ov -format UDZO 'dist/SDDL-DS-macos.dmg'
+          hdiutil create -volname 'SDDL-DS' -srcfolder "$APP_DIR" -ov -format UDZO 'dist/SDDL-DS-macos-arm64.dmg'
 
-      - name: Upload macOS artifact
+      - name: Upload macOS artifact (native)
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: macOS-artifact
-          path: dist/SDDL-DS-macos.dmg
+          path: dist/SDDL-DS-macos-arm64.dmg
 
       # Package Intel-only DMG from x64 dist
       - name: Package macOS x86_64 (DMG)
@@ -136,7 +143,7 @@ jobs:
         with:
           files: |
             artifacts/**/SDDL-DS-windows.zip
-            artifacts/**/SDDL-DS-macos.dmg
+            artifacts/**/SDDL-DS-macos-arm64.dmg
             artifacts/**/SDDL-DS-macos-x64.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
