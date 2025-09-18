@@ -36,10 +36,22 @@
   }
 
   async function loadSchema() {
-    const schema = await window.API.get_schema();
-    currentSchema = schema || {};
-    formEl.innerHTML = '';
-    (schema.fields || []).forEach(f => formEl.appendChild(renderField(f)));
+    try {
+      const schema = await window.API.get_schema();
+      currentSchema = schema || {};
+      formEl.innerHTML = '';
+      (schema.fields || []).forEach(f => formEl.appendChild(renderField(f)));
+    } catch (err) {
+      console.error('Failed to load schema:', err);
+      formEl.innerHTML = '<div class="text-danger">Failed to load schema. Waiting for API…</div>';
+      setTimeout(() => whenApiReady(loadSchema), 300);
+    }
+  }
+
+  function whenApiReady(fn) {
+    if (typeof window.pywebview !== 'undefined' && window.pywebview.api) { fn(); return; }
+    const handler = () => { document.removeEventListener('pywebviewready', handler); fn(); };
+    document.addEventListener('pywebviewready', handler);
   }
 
   btnGen.addEventListener('click', async (e) => {
@@ -79,5 +91,5 @@
     await window.API.open_folder(folder);
   });
 
-  loadSchema();
+  whenApiReady(loadSchema);
 })();
