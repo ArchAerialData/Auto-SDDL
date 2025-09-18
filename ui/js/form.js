@@ -51,24 +51,61 @@
         panel.appendChild(row);
       });
 
+      // Add a built-in "Custom" option that converts to free text
+      let customRow, customCB;
+      const customInput = document.createElement('input');
+      customInput.type = 'text';
+      customInput.className = 'form-control mt-1';
+      customInput.placeholder = 'Custom entries (comma or semicolon separated)';
+      customInput.id = f.key + '__custom';
+      customInput.style.display = 'none';
+
+      if (f.allow_custom) {
+        customRow = document.createElement('label');
+        customRow.className = 'ms-option';
+        customCB = document.createElement('input');
+        customCB.type = 'checkbox';
+        customCB.value = '__CUSTOM__';
+        const ctxt = document.createElement('span'); ctxt.textContent = ' Custom';
+        customRow.appendChild(customCB); customRow.appendChild(ctxt);
+        panel.appendChild(customRow);
+      }
+
       const hidden = document.createElement('input');
       hidden.type = 'hidden';
       hidden.id = f.key;
       hidden.required = !!f.required;
 
       function updateDisplay() {
-        const selected = Array.from(panel.querySelectorAll('input[type="checkbox"]:checked')).map(x => x.value);
-        const custom = f.allow_custom ? (document.getElementById(f.key + '__custom')?.value || '') : '';
-        let customParts = [];
-        if (custom) customParts = custom.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
-        const all = selected.concat(customParts);
-        hidden.value = all.join(', ');
-        display.textContent = all.length ? all.join(', ') : 'Select…';
+        // If Custom is active, ignore checkbox selections and use free text
+        let values = [];
+        if (customCB && customCB.checked) {
+          const parts = (customInput.value || '').split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+          values = parts;
+        } else {
+          values = Array.from(panel.querySelectorAll('label.ms-option input[type="checkbox"]'))
+            .filter(x => x !== customCB && x.checked)
+            .map(x => x.value);
+        }
+        hidden.value = values.join(', ');
+        display.textContent = values.length ? values.join(', ') : 'Select…';
+      }
+
+      function handleCustomToggle() {
+        if (!customCB) return;
+        const enabled = customCB.checked;
+        customInput.style.display = enabled ? '' : 'none';
+        if (enabled) { panel.hidden = true; customInput.focus(); }
+        updateDisplay();
       }
 
       display.addEventListener('click', () => { panel.hidden = !panel.hidden; });
       display.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); panel.hidden = !panel.hidden; }});
-      panel.addEventListener('change', updateDisplay);
+      panel.addEventListener('change', (e) => {
+        if (e.target === customCB) handleCustomToggle();
+        else updateDisplay();
+      });
+      customInput.addEventListener('input', updateDisplay);
 
       // Close when clicking outside
       const closeOnOutside = (e) => { if (!container.contains(e.target)) { panel.hidden = true; } };
@@ -80,16 +117,7 @@
       wrap.appendChild(label);
       wrap.appendChild(container);
       wrap.appendChild(hidden);
-
-      if (f.allow_custom) {
-        const custom = document.createElement('input');
-        custom.type = 'text';
-        custom.className = 'form-control mt-1';
-        custom.placeholder = 'Custom entries (comma or semicolon separated)';
-        custom.id = f.key + '__custom';
-        custom.addEventListener('input', updateDisplay);
-        wrap.appendChild(custom);
-      }
+      wrap.appendChild(customInput);
       return wrap;
     } else if (f.type === 'textarea') {
       input = document.createElement('textarea'); input.rows = 3;
