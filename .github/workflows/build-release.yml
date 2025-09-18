@@ -43,7 +43,12 @@ jobs:
           pip install pyinstaller
 
       - name: Build with PyInstaller
-        run: pyinstaller --clean -y app.spec
+        run: |
+          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            pyinstaller --clean -y --target-arch universal2 app.spec
+          else
+            pyinstaller --clean -y app.spec
+          fi
 
       # --- Windows packaging (ZIP using PowerShell Compress-Archive) ---
       - name: Package Windows (ZIP)
@@ -51,15 +56,15 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path 'dist\FormGen-windows.zip') { Remove-Item 'dist\FormGen-windows.zip' -Force }
-          $dir = 'dist\\FormGen'
-          $exe = 'dist\\FormGen.exe'
+          $dir = 'dist\\SDDL-DS'
+          $exe = 'dist\\SDDL-DS.exe'
           if (Test-Path $dir) {
-            Compress-Archive -Path $dir -DestinationPath 'dist\FormGen-windows.zip' -Force
+            Compress-Archive -Path $dir -DestinationPath 'dist\SDDL-DS-windows.zip' -Force
           } elseif (Test-Path $exe) {
-            Compress-Archive -Path $exe -DestinationPath 'dist\FormGen-windows.zip' -Force
+            Compress-Archive -Path $exe -DestinationPath 'dist\SDDL-DS-windows.zip' -Force
           } else {
             Get-ChildItem dist -Recurse | Format-List -Force | Out-String | Write-Output
-            throw "PyInstaller output not found: expected 'dist\\FormGen' or 'dist\\FormGen.exe'"
+            throw "PyInstaller output not found: expected 'dist\\SDDL-DS' or 'dist\\SDDL-DS.exe'"
           }
 
       - name: Upload Windows artifact
@@ -67,7 +72,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Windows-artifact
-          path: dist/FormGen-windows.zip
+          path: dist/SDDL-DS-windows.zip
 
       # --- macOS packaging (DMG via hdiutil) ---
       - name: Package macOS (DMG)
@@ -75,20 +80,20 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          APP_DIR="./dist/FormGen.app"
+          APP_DIR="./dist/SDDL-DS.app"
           if [ ! -e "$APP_DIR" ]; then
             # Fallback: if PyInstaller emitted onedir without BUNDLE, try folder
-            ALT_APP="./dist/FormGen"
+            ALT_APP="./dist/SDDL-DS"
             if [ -d "$ALT_APP" ]; then APP_DIR="$ALT_APP"; else ls -laR ./dist; echo "No FormGen.app found"; exit 1; fi
           fi
-          hdiutil create -volname 'FormGen' -srcfolder "$APP_DIR" -ov -format UDZO 'dist/FormGen-macos.dmg'
+          hdiutil create -volname 'SDDL-DS' -srcfolder "$APP_DIR" -ov -format UDZO 'dist/SDDL-DS-macos.dmg'
 
       - name: Upload macOS artifact
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: macOS-artifact
-          path: dist/FormGen-macos.dmg
+          path: dist/SDDL-DS-macos.dmg
 
   release:
     needs: build
@@ -104,7 +109,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/**/FormGen-windows.zip
-            artifacts/**/FormGen-macos.dmg
+            artifacts/**/SDDL-DS-windows.zip
+            artifacts/**/SDDL-DS-macos.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
