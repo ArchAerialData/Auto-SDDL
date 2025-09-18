@@ -399,6 +399,11 @@ body {
     color: var(--text-primary);
 }
 
+/* Ensure plain <label> elements (without Bootstrap classes) are legible */
+label {
+    color: var(--text-primary) !important;
+}
+
 .form-control,
 .form-select {
     background-color: #1b1b1b;
