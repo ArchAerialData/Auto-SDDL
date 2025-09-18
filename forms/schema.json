@@ -69,7 +69,8 @@
     {
       "key": "project_frequency",
       "label": "Project Frequency",
-      "type": "text",
+      "type": "select",
+      "options": ["One-Time", "Weekly", "Bi-Weekly", "Monthly", "Quarterly", "Annual"],
       "required": false
     },
     {
