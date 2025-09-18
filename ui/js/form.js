@@ -49,9 +49,16 @@
   }
 
   function whenApiReady(fn) {
-    if (typeof window.pywebview !== 'undefined' && window.pywebview.api) { fn(); return; }
+    // Robust wait: immediate, event-based, and polling fallback.
+    const ready = () => (typeof window.pywebview !== 'undefined' && window.pywebview.api);
+    if (ready()) { fn(); return; }
     const handler = () => { document.removeEventListener('pywebviewready', handler); fn(); };
     document.addEventListener('pywebviewready', handler);
+    let tries = 0;
+    const id = setInterval(() => {
+      if (ready()) { clearInterval(id); fn(); }
+      else if (++tries > 50) { clearInterval(id); fn(); }
+    }, 200);
   }
 
   btnGen.addEventListener('click', async (e) => {
