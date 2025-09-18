@@ -25,21 +25,72 @@
       input = document.createElement('select');
       (f.options || []).forEach(opt => { const o = document.createElement('option'); o.value = o.textContent = opt; input.appendChild(o); });
     } else if (f.type === 'multiselect') {
-      input = document.createElement('select');
-      input.multiple = true;
-      input.size = Math.min(6, Math.max(4, (f.options || []).length));
-      (f.options || []).forEach(opt => { const o = document.createElement('option'); o.value = o.textContent = opt; input.appendChild(o); });
-      input.className = 'form-select';
-      // Optional custom text entries
+      // Custom multi-select dropdown (checkbox list) that stays open
+      const container = document.createElement('div');
+      container.className = 'ms-container';
+
+      const display = document.createElement('button');
+      display.type = 'button';
+      display.className = 'ms-display form-control text-start';
+      display.textContent = 'Select…';
+
+      const panel = document.createElement('div');
+      panel.className = 'ms-panel';
+      panel.id = f.key + '__panel';
+      panel.hidden = true;
+
+      (f.options || []).forEach(opt => {
+        const row = document.createElement('label');
+        row.className = 'ms-option';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = opt;
+        const txt = document.createElement('span');
+        txt.textContent = ' ' + opt;
+        row.appendChild(cb); row.appendChild(txt);
+        panel.appendChild(row);
+      });
+
+      const hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.id = f.key;
+      hidden.required = !!f.required;
+
+      function updateDisplay() {
+        const selected = Array.from(panel.querySelectorAll('input[type="checkbox"]:checked')).map(x => x.value);
+        const custom = f.allow_custom ? (document.getElementById(f.key + '__custom')?.value || '') : '';
+        let customParts = [];
+        if (custom) customParts = custom.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+        const all = selected.concat(customParts);
+        hidden.value = all.join(', ');
+        display.textContent = all.length ? all.join(', ') : 'Select…';
+      }
+
+      display.addEventListener('click', () => { panel.hidden = !panel.hidden; });
+      display.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); panel.hidden = !panel.hidden; }});
+      panel.addEventListener('change', updateDisplay);
+
+      // Close when clicking outside
+      const closeOnOutside = (e) => { if (!container.contains(e.target)) { panel.hidden = true; } };
+      panel.addEventListener('mouseenter', () => document.addEventListener('click', closeOnOutside, { once: true }));
+
+      container.appendChild(display);
+      container.appendChild(panel);
+
+      wrap.appendChild(label);
+      wrap.appendChild(container);
+      wrap.appendChild(hidden);
+
       if (f.allow_custom) {
         const custom = document.createElement('input');
         custom.type = 'text';
         custom.className = 'form-control mt-1';
         custom.placeholder = 'Custom entries (comma or semicolon separated)';
         custom.id = f.key + '__custom';
-        wrap.appendChild(label); wrap.appendChild(input); wrap.appendChild(custom);
-        return wrap;
+        custom.addEventListener('input', updateDisplay);
+        wrap.appendChild(custom);
       }
+      return wrap;
     } else if (f.type === 'textarea') {
       input = document.createElement('textarea'); input.rows = 3;
     } else {
@@ -98,15 +149,8 @@
       if (!el) return;
       let val = '';
       if (f.type === 'multiselect') {
-        const selected = Array.from(el.selectedOptions || []).map(o => o.value);
-        if (f.allow_custom) {
-          const custom = document.getElementById(f.key + '__custom');
-          if (custom && custom.value) {
-            const parts = custom.value.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
-            selected.push(...parts);
-          }
-        }
-        val = selected.join(', ');
+        // Hidden input holds combined values (selected+custom)
+        val = (el.value || '').trim();
       } else if (el.tagName === 'SELECT') {
         val = el.value || '';
       } else if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {

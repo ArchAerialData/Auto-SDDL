@@ -442,6 +442,37 @@ label {
     --bs-btn-hover-color: #111827; /* dark text on light bg */
 }
 
+/* Custom Multi-select (checkbox dropdown) */
+.ms-container { position: relative; }
+.ms-display {
+    cursor: pointer;
+    background-color: #343a40;
+    border-color: #4a4a4a;
+}
+.ms-display:focus { outline: none; box-shadow: 0 0 0 0.2rem rgba(49,77,236,0.25); border-color: var(--primary-blue); }
+.ms-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    background-color: #23272b;
+    color: var(--text-primary);
+    border: 1px solid #4a4a4a;
+    border-radius: 6px;
+    z-index: 2000;
+    max-height: 240px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+.ms-option { display: flex; align-items: center; padding: 8px 10px; user-select: none; }
+.ms-option:hover { background-color: rgba(94,106,139,0.11); }
+.ms-option input[type="checkbox"] {
+    accent-color: var(--primary-blue);
+    width: 18px; height: 18px;
+}
+.ms-option span { margin-left: 6px; color: var(--text-secondary); }
+.ms-option input[type="checkbox"]:checked + span { color: var(--text-primary); }
+
 /* Activity Feed */
 .activity-feed {
     max-height: 300px;
