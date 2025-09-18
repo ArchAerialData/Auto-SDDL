@@ -8,12 +8,14 @@ on:
       - 'ui/**'
       - 'app.py'
       - 'api.py'
+      - '.github/**'
   pull_request:
     paths:
       - 'templates/**'
       - 'ui/**'
       - 'app.py'
       - 'api.py'
+      - '.github/**'
   release:
     types: [published]
   workflow_dispatch:
