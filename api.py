@@ -1,6 +1,7 @@
 import json, os, sys, subprocess
 from datetime import datetime
 from openpyxl import Workbook, load_workbook
+from openpyxl.utils import range_boundaries, get_column_letter
 from docx import Document
 
 SCHEMA_PATH = os.path.join('forms', 'schema.json')
@@ -21,16 +22,161 @@ class LocalAPI:
         return True
 
     def generate_xlsx(self, data, folder):
+        """Generate or append to XLSX, honoring an optional template.
+
+        Behavior:
+        - If an output file exists in the target folder, append to it.
+        - Else if a known template exists under templates/, copy/initialize from it and write.
+        - Else fall back to the simple header+append behavior.
+
+        Mapping:
+        - If a header row is present (plain sheet or table), map values by matching
+          schema field label (preferred) or key to header text.
+        - If no header row exists, create one from provided data keys (legacy behavior).
+        """
         os.makedirs(folder or '.', exist_ok=True)
         xlsx_path = os.path.join(folder or '.', 'output.xlsx')
-        if os.path.exists(xlsx_path):
-            wb = load_workbook(xlsx_path)
-            ws = wb.active
+
+        # Discover a template deterministically (explicit known names)
+        template_candidates = [
+            os.path.join(TEMPLATES_DIR, 'single-row-template.xlsx'),
+            os.path.join(TEMPLATES_DIR, 'SDDL-Template-Header-Fields.xlsx'),
+            os.path.join(TEMPLATES_DIR, 'xlsx_template.xlsx'),
+        ]
+        template_path = next((p for p in template_candidates if os.path.exists(p)), None)
+
+        # Load schema for labels/keys mapping (best-effort; fallback to data keys)
+        try:
+            schema = self.get_schema()
+        except Exception:
+            schema = {}
+
+        fields = []
+        if isinstance(schema, dict):
+            # support either flat fields or sections[*].fields
+            if 'sections' in schema and isinstance(schema['sections'], list):
+                for section in schema['sections']:
+                    fields.extend(section.get('fields', []))
+            if not fields:
+                fields = schema.get('fields', []) or []
+
+        def load_workbook_from_template_or_existing():
+            if os.path.exists(xlsx_path):
+                return load_workbook(xlsx_path)
+            if template_path and os.path.exists(template_path):
+                # Start from template
+                wb_t = load_workbook(template_path)
+                # Save immediately to establish the output file with template formatting
+                wb_t.save(xlsx_path)
+                return load_workbook(xlsx_path)
+            # Fallback new workbook
+            return Workbook()
+
+        wb = load_workbook_from_template_or_existing()
+        ws = wb.active
+
+        # Try to locate a table to append into. If found, capture its bounds and headers.
+        table_obj = None
+        table_min_col = table_min_row = table_max_col = table_max_row = None
+        headers = []
+        if hasattr(ws, 'tables') and ws.tables:
+            # Prefer a table named FormData; otherwise pick the first
+            preferred = ws.tables.get('FormData') if isinstance(ws.tables, dict) else None
+            if preferred is None:
+                # openpyxl 3.1 uses dict mapping; but support generic iteration
+                try:
+                    preferred = next(iter(ws.tables.values()))
+                except Exception:
+                    preferred = None
+            table_obj = preferred
+            if table_obj is not None and getattr(table_obj, 'ref', None):
+                min_col, min_row, max_col, max_row = range_boundaries(table_obj.ref)
+                table_min_col, table_min_row, table_max_col, table_max_row = (
+                    min_col, min_row, max_col, max_row
+                )
+                # Header row is the first row in the table range
+                for c in range(min_col, max_col + 1):
+                    headers.append(ws.cell(row=min_row, column=c).value)
+
+        # If no table headers, fall back to first row as header
+        if not headers and ws.max_row >= 1:
+            headers = [cell.value for cell in ws[1]]
+            table_min_col, table_min_row = 1, 1
+            table_max_col = len(headers) if headers else 0
+
+        # Create header row if still missing
+        if not headers:
+            # Legacy fallback: create headers from provided data order
+            headers = list(data.keys())
+            ws.append(headers)
+            table_min_col, table_min_row = 1, 1
+            table_max_col = len(headers)
+
+        # Build a helper to get value by header name using label/key matching
+        # Prefer field label match; then key; finally raw data key.
+        label_by_key = {f.get('key'): f.get('label') for f in fields if isinstance(f, dict)}
+        key_by_label = {v: k for k, v in label_by_key.items() if v}
+
+        def value_for_header(h):
+            if h is None:
+                return ''
+            # Normalize header to string for matching
+            hs = str(h)
+            # Prefer label match
+            if hs in key_by_label:
+                return data.get(key_by_label[hs], '')
+            # Fallback: header equals key
+            if hs in data:
+                return data.get(hs, '')
+            # Final fallback: try to match by label directly in values dict
+            # (UI always sends keys; this is just extra safety.)
+            for k, lbl in label_by_key.items():
+                if lbl == hs and k in data:
+                    return data.get(k, '')
+            return ''
+
+        # Determine target row index for append
+        if table_obj is not None and table_min_col is not None:
+            # Find next empty row in the first column of the table
+            r = (table_min_row or 1) + 1  # first data row below header
+            while ws.cell(row=r, column=table_min_col).value not in (None, ''):
+                r += 1
+            target_row = r
+            start_col = table_min_col
         else:
-            wb = Workbook()
-            ws = wb.active
-            ws.append(list(data.keys()))
-        ws.append([data.get(k, '') for k in ws[1]])
+            # Append on the worksheet after the last row, starting column 1
+            target_row = ws.max_row + 1 if ws.max_row else 2
+            start_col = 1
+
+        # Write values aligned with headers
+        if headers:
+            for idx, header in enumerate(headers):
+                ws.cell(row=target_row, column=start_col + idx, value=value_for_header(header))
+        else:
+            # Should not happen, but keep compatibility
+            ws.append([data.get(k, '') for k in ws[1]])
+
+        # Copy style from the previous data row if available for consistent formatting
+        prev_row = target_row - 1
+        if prev_row >= (table_min_row or 1) + 1 and (table_max_col or 0) >= (table_min_col or 1):
+            for c in range(start_col, start_col + len(headers)):
+                src = ws.cell(row=prev_row, column=c)
+                dst = ws.cell(row=target_row, column=c)
+                dst.font = src.font
+                dst.fill = src.fill
+                dst.alignment = src.alignment
+                dst.number_format = src.number_format
+                dst.border = src.border
+
+        # If we appended into a table, extend its ref to include the new row
+        if table_obj is not None and table_min_col is not None and headers:
+            end_col = start_col + len(headers) - 1
+            start_col_letter = get_column_letter(start_col)
+            end_col_letter = get_column_letter(end_col)
+            # Table ref includes header row at top
+            new_ref = f"{start_col_letter}{table_min_row}:{end_col_letter}{target_row}"
+            table_obj.ref = new_ref
+
         wb.save(xlsx_path)
         return os.path.abspath(xlsx_path)
 
@@ -61,4 +207,3 @@ class LocalAPI:
         else:
             subprocess.call(['xdg-open', path])
         return True
-
