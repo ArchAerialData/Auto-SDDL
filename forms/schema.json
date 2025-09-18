@@ -4,8 +4,8 @@
   "fields": [
     { "key": "client", "label": "Client", "type": "text", "required": true },
     { "key": "project_name", "label": "Project Name", "type": "text", "required": true },
-    { "key": "deliverables", "label": "Deliverables", "type": "textarea", "required": false },
-    { "key": "watermarks", "label": "Watermark(s)", "type": "text", "required": false },
+    { "key": "deliverables", "label": "Deliverables", "type": "multiselect", "options": [], "allow_custom": true, "required": false },
+    { "key": "watermarks", "label": "Watermark(s)", "type": "multiselect", "options": [], "allow_custom": true, "required": false },
     { "key": "deliverables_uploads", "label": "Deliverables Upload(s)", "type": "multiselect", "options": ["Dropbox", "Procor", "DroneDeploy", "DroneworkAdvisor"], "allow_custom": true, "required": false },
     { "key": "ops_contact_emails", "label": "Operations Contact Email", "type": "textarea", "placeholder": "Separate multiple emails with ';' or ','", "required": false },
     { "key": "ops_contact_title", "label": "Operations Contact Title", "type": "text", "required": false },
