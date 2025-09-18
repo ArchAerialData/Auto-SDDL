@@ -19,8 +19,9 @@ def main():
 
     html_path = os.path.join('ui', 'index.html')
     window = webview.create_window('SDDL-DS', html_path, js_api=api)
-    # NOTE: do not force a GUI backend (e.g., edgechromium); keep portable.
-    webview.start(http_server=True)
+    # Optional dev tools when WEBVIEW_DEBUG=1
+    debug = os.environ.get('WEBVIEW_DEBUG', '').strip() in ('1', 'true', 'yes')
+    webview.start(debug=debug, http_server=True)
 
 
 if __name__ == '__main__':
