@@ -24,6 +24,22 @@
     if (f.type === 'select') {
       input = document.createElement('select');
       (f.options || []).forEach(opt => { const o = document.createElement('option'); o.value = o.textContent = opt; input.appendChild(o); });
+    } else if (f.type === 'multiselect') {
+      input = document.createElement('select');
+      input.multiple = true;
+      input.size = Math.min(6, Math.max(4, (f.options || []).length));
+      (f.options || []).forEach(opt => { const o = document.createElement('option'); o.value = o.textContent = opt; input.appendChild(o); });
+      input.className = 'form-select';
+      // Optional custom text entries
+      if (f.allow_custom) {
+        const custom = document.createElement('input');
+        custom.type = 'text';
+        custom.className = 'form-control mt-1';
+        custom.placeholder = 'Custom entries (comma or semicolon separated)';
+        custom.id = f.key + '__custom';
+        wrap.appendChild(label); wrap.appendChild(input); wrap.appendChild(custom);
+        return wrap;
+      }
     } else if (f.type === 'textarea') {
       input = document.createElement('textarea'); input.rows = 3;
     } else {
@@ -76,10 +92,28 @@
     e.preventDefault();
     const data = {};
     const missing = [];
-    formEl.querySelectorAll('input,select,textarea').forEach(el => {
-      const val = (el.value || '').trim();
-      data[el.id] = val;
-      if (el.required && !val) missing.push(el.id);
+    // Use schema to collect values per field type
+    (currentSchema.fields || []).forEach(f => {
+      const el = document.getElementById(f.key);
+      if (!el) return;
+      let val = '';
+      if (f.type === 'multiselect') {
+        const selected = Array.from(el.selectedOptions || []).map(o => o.value);
+        if (f.allow_custom) {
+          const custom = document.getElementById(f.key + '__custom');
+          if (custom && custom.value) {
+            const parts = custom.value.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+            selected.push(...parts);
+          }
+        }
+        val = selected.join(', ');
+      } else if (el.tagName === 'SELECT') {
+        val = el.value || '';
+      } else if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+        val = (el.value || '').trim();
+      }
+      data[f.key] = val;
+      if (f.required && !val) missing.push(f.key);
     });
 
     if (missing.length) {
