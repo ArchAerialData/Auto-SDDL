@@ -12,7 +12,7 @@
     { "key": "ops_contact_name", "label": "Name", "type": "text", "required": false },
     { "key": "location", "label": "Location", "type": "text", "required": false },
     { "key": "project_address", "label": "Project Address", "type": "text", "required": false },
-    { "key": "survey_frequency", "label": "Survey Frequency", "type": "text", "placeholder": "TODO(Owner): define options if constrained", "required": false },
+    { "key": "survey_frequency", "label": "Survey Frequency", "type": "select", "options": ["One-time", "Weekly", "Monthly", "Quarterly"], "required": false },
     { "key": "duration", "label": "Duration", "type": "text", "required": false },
     { "key": "ap_contact", "label": "Accounts Payable Contact", "type": "text", "required": false },
     { "key": "ap_contact_email", "label": "Accounts Payable Contact Email", "type": "text", "required": false },
