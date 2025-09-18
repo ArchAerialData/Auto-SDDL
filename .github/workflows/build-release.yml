@@ -2,10 +2,20 @@ name: build-release
 on:
   push:
     branches:
-      - '**'          # build on any branch commit
-    tags:
-      - 'v*'          # release when pushing version tags
+      - '**'
+    paths:
+      - 'templates/**'
+      - 'ui/**'
+      - 'app.py'
+      - 'api.py'
   pull_request:
+    paths:
+      - 'templates/**'
+      - 'ui/**'
+      - 'app.py'
+      - 'api.py'
+  release:
+    types: [published]
   workflow_dispatch:
 
 jobs:
@@ -66,7 +76,7 @@ jobs:
 
   release:
     needs: build
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
