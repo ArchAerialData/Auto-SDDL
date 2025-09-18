@@ -1,0 +1,22 @@
+﻿2025-09-18T02:50:22.0215990Z ##[group]Run if [[ "macos-latest" == "macos-latest" ]]; then
+2025-09-18T02:50:22.0216660Z [36;1mif [[ "macos-latest" == "macos-latest" ]]; then[0m
+2025-09-18T02:50:22.0217060Z [36;1m  pyinstaller --clean -y --target-arch universal2 app.spec[0m
+2025-09-18T02:50:22.0217420Z [36;1melse[0m
+2025-09-18T02:50:22.0217730Z [36;1m  pyinstaller --clean -y app.spec[0m
+2025-09-18T02:50:22.0218060Z [36;1mfi[0m
+2025-09-18T02:50:22.0308530Z shell: /bin/bash -e {0}
+2025-09-18T02:50:22.0308810Z env:
+2025-09-18T02:50:22.0309170Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0309790Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.11.9/arm64/lib/pkgconfig
+2025-09-18T02:50:22.0310300Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0310760Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0311270Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0311810Z ##[endgroup]
+2025-09-18T02:50:22.2157630Z 79 INFO: PyInstaller: 6.10.0, contrib hooks: 2025.8
+2025-09-18T02:50:22.2159840Z 79 INFO: Python: 3.11.9
+2025-09-18T02:50:22.2346870Z 98 INFO: Platform: macOS-15.6-arm64-arm-64bit
+2025-09-18T02:50:22.2349450Z 98 INFO: Python environment: /Library/Frameworks/Python.framework/Versions/3.11
+2025-09-18T02:50:22.2350050Z option(s) not allowed:
+2025-09-18T02:50:22.2350380Z   --target-architecture/--target-arch
+2025-09-18T02:50:22.2350760Z makespec options not valid when a .spec file is given
+2025-09-18T02:50:22.2814030Z ##[error]Process completed with exit code 1.

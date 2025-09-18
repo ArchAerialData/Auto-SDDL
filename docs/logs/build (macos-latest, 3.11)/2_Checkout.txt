@@ -1,0 +1,70 @@
+﻿2025-09-18T02:50:11.4847320Z ##[group]Run actions/checkout@v4
+2025-09-18T02:50:11.4847980Z with:
+2025-09-18T02:50:11.4848330Z   repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:11.4849000Z   token: ***
+2025-09-18T02:50:11.4849310Z   ssh-strict: true
+2025-09-18T02:50:11.4849630Z   ssh-user: git
+2025-09-18T02:50:11.4850100Z   persist-credentials: true
+2025-09-18T02:50:11.4850450Z   clean: true
+2025-09-18T02:50:11.4850770Z   sparse-checkout-cone-mode: true
+2025-09-18T02:50:11.4851170Z   fetch-depth: 1
+2025-09-18T02:50:11.4851520Z   fetch-tags: false
+2025-09-18T02:50:11.4852130Z   show-progress: true
+2025-09-18T02:50:11.4852460Z   lfs: false
+2025-09-18T02:50:11.4852760Z   submodules: false
+2025-09-18T02:50:11.4853080Z   set-safe-directory: true
+2025-09-18T02:50:11.4853570Z ##[endgroup]
+2025-09-18T02:50:12.1290570Z Syncing repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.1293140Z ##[group]Getting Git version info
+2025-09-18T02:50:12.1293940Z Working directory is '/Users/runner/work/Auto-SDDL/Auto-SDDL'
+2025-09-18T02:50:12.1295000Z [command]/opt/homebrew/bin/git version
+2025-09-18T02:50:12.1531250Z git version 2.50.1
+2025-09-18T02:50:12.1986900Z ##[endgroup]
+2025-09-18T02:50:12.2205450Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/00e5294d-9b27-42da-9b64-f01c74f1a6d1/.gitconfig'
+2025-09-18T02:50:12.2244360Z Temporarily overriding HOME='/Users/runner/work/_temp/00e5294d-9b27-42da-9b64-f01c74f1a6d1' before making global git config changes
+2025-09-18T02:50:12.2328540Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-18T02:50:12.2338640Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Auto-SDDL/Auto-SDDL
+2025-09-18T02:50:12.2346110Z Deleting the contents of '/Users/runner/work/Auto-SDDL/Auto-SDDL'
+2025-09-18T02:50:12.2350460Z ##[group]Initializing the repository
+2025-09-18T02:50:12.2353610Z [command]/opt/homebrew/bin/git init /Users/runner/work/Auto-SDDL/Auto-SDDL
+2025-09-18T02:50:12.2357770Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-09-18T02:50:12.2362410Z hint: is subject to change. To configure the initial branch name to use in all
+2025-09-18T02:50:12.2366970Z hint: of your new repositories, which will suppress this warning, call:
+2025-09-18T02:50:12.2369720Z hint:
+2025-09-18T02:50:12.2371650Z hint: 	git config --global init.defaultBranch <name>
+2025-09-18T02:50:12.2373900Z hint:
+2025-09-18T02:50:12.2375960Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-09-18T02:50:12.2379100Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-09-18T02:50:12.2380650Z hint:
+2025-09-18T02:50:12.2381480Z hint: 	git branch -m <name>
+2025-09-18T02:50:12.2382360Z hint:
+2025-09-18T02:50:12.2383500Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-09-18T02:50:12.2385450Z Initialized empty Git repository in /Users/runner/work/Auto-SDDL/Auto-SDDL/.git/
+2025-09-18T02:50:12.2388960Z [command]/opt/homebrew/bin/git remote add origin https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.2406250Z ##[endgroup]
+2025-09-18T02:50:12.2407960Z ##[group]Disabling automatic garbage collection
+2025-09-18T02:50:12.2417630Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2025-09-18T02:50:12.2560940Z ##[endgroup]
+2025-09-18T02:50:12.2562760Z ##[group]Setting up auth
+2025-09-18T02:50:12.2565990Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-18T02:50:12.2779060Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-18T02:50:12.4594030Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-18T02:50:12.4645850Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-18T02:50:12.6413190Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-09-18T02:50:12.6620980Z ##[endgroup]
+2025-09-18T02:50:12.6627430Z ##[group]Fetching the repository
+2025-09-18T02:50:12.6633790Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b84b45c0cef294b5540824f0fb5293dd50da4b77:refs/remotes/origin/main
+2025-09-18T02:50:13.6306080Z From https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:13.6341650Z  * [new ref]         b84b45c0cef294b5540824f0fb5293dd50da4b77 -> origin/main
+2025-09-18T02:50:13.6466530Z ##[endgroup]
+2025-09-18T02:50:13.6504570Z ##[group]Determining the checkout info
+2025-09-18T02:50:13.6540860Z ##[endgroup]
+2025-09-18T02:50:13.6545680Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2025-09-18T02:50:13.6550110Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2025-09-18T02:50:13.6683780Z ##[group]Checking out the ref
+2025-09-18T02:50:13.6692380Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-09-18T02:50:13.6980950Z Switched to a new branch 'main'
+2025-09-18T02:50:13.6990080Z branch 'main' set up to track 'origin/main'.
+2025-09-18T02:50:13.6995940Z ##[endgroup]
+2025-09-18T02:50:13.7101660Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2025-09-18T02:50:13.7218080Z b84b45c0cef294b5540824f0fb5293dd50da4b77

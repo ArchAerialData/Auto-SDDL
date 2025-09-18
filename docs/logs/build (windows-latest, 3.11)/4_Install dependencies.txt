@@ -1,0 +1,13 @@
+﻿2025-09-18T02:50:22.0564539Z ##[group]Run python -m pip install -U pip
+2025-09-18T02:50:22.0565687Z [36;1mpython -m pip install -U pip[0m
+2025-09-18T02:50:22.0565965Z [36;1mpip install -r requirements.txt[0m
+2025-09-18T02:50:22.0566217Z [36;1mpip install pyinstaller[0m
+2025-09-18T02:50:22.1087889Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2025-09-18T02:50:22.1088274Z env:
+2025-09-18T02:50:22.1088531Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1089000Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+2025-09-18T02:50:22.1089438Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1089834Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1090231Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1090534Z ##[endgroup]
+2025-09-18T02:50:24.6665311Z ##[error]The operation was canceled.

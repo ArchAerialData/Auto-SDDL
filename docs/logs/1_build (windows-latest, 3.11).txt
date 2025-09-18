@@ -1,0 +1,140 @@
+﻿2025-09-18T02:50:11.2589701Z Current runner version: '2.328.0'
+2025-09-18T02:50:11.2612782Z ##[group]Runner Image Provisioner
+2025-09-18T02:50:11.2613535Z Hosted Compute Agent
+2025-09-18T02:50:11.2614018Z Version: 20250829.383
+2025-09-18T02:50:11.2614572Z Commit: 27cb235aab5b0e52e153a26cd86b4742e89dac5d
+2025-09-18T02:50:11.2615178Z Build Date: 2025-08-29T13:48:48Z
+2025-09-18T02:50:11.2615717Z ##[endgroup]
+2025-09-18T02:50:11.2616164Z ##[group]Operating System
+2025-09-18T02:50:11.2616693Z Microsoft Windows Server 2022
+2025-09-18T02:50:11.2617214Z 10.0.20348
+2025-09-18T02:50:11.2617623Z Datacenter
+2025-09-18T02:50:11.2618045Z ##[endgroup]
+2025-09-18T02:50:11.2618441Z ##[group]Runner Image
+2025-09-18T02:50:11.2618931Z Image: windows-2022
+2025-09-18T02:50:11.2619365Z Version: 20250907.29.1
+2025-09-18T02:50:11.2620325Z Included Software: https://github.com/actions/runner-images/blob/win22/20250907.29/images/windows/Windows2022-Readme.md
+2025-09-18T02:50:11.2621951Z Image Release: https://github.com/actions/runner-images/releases/tag/win22%2F20250907.29
+2025-09-18T02:50:11.2622855Z ##[endgroup]
+2025-09-18T02:50:11.2625199Z ##[group]GITHUB_TOKEN Permissions
+2025-09-18T02:50:11.2627016Z Actions: write
+2025-09-18T02:50:11.2627521Z Attestations: write
+2025-09-18T02:50:11.2628519Z Checks: write
+2025-09-18T02:50:11.2629656Z Contents: write
+2025-09-18T02:50:11.2630186Z Deployments: write
+2025-09-18T02:50:11.2630617Z Discussions: write
+2025-09-18T02:50:11.2631046Z Issues: write
+2025-09-18T02:50:11.2631491Z Metadata: read
+2025-09-18T02:50:11.2631896Z Models: read
+2025-09-18T02:50:11.2632338Z Packages: write
+2025-09-18T02:50:11.2632767Z Pages: write
+2025-09-18T02:50:11.2633205Z PullRequests: write
+2025-09-18T02:50:11.2633647Z RepositoryProjects: write
+2025-09-18T02:50:11.2634154Z SecurityEvents: write
+2025-09-18T02:50:11.2634673Z Statuses: write
+2025-09-18T02:50:11.2635078Z ##[endgroup]
+2025-09-18T02:50:11.2637242Z Secret source: Actions
+2025-09-18T02:50:11.2637907Z Prepare workflow directory
+2025-09-18T02:50:11.2955589Z Prepare all required actions
+2025-09-18T02:50:11.3006959Z Getting action download info
+2025-09-18T02:50:11.7658922Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-09-18T02:50:11.8801007Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2025-09-18T02:50:12.0145887Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-09-18T02:50:12.3477273Z Complete job name: build (windows-latest, 3.11)
+2025-09-18T02:50:12.5179295Z ##[group]Run actions/checkout@v4
+2025-09-18T02:50:12.5180855Z with:
+2025-09-18T02:50:12.5181429Z   repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.5182471Z   token: ***
+2025-09-18T02:50:12.5182973Z   ssh-strict: true
+2025-09-18T02:50:12.5183490Z   ssh-user: git
+2025-09-18T02:50:12.5184012Z   persist-credentials: true
+2025-09-18T02:50:12.5184608Z   clean: true
+2025-09-18T02:50:12.5185170Z   sparse-checkout-cone-mode: true
+2025-09-18T02:50:12.5185880Z   fetch-depth: 1
+2025-09-18T02:50:12.5186391Z   fetch-tags: false
+2025-09-18T02:50:12.5186939Z   show-progress: true
+2025-09-18T02:50:12.5187461Z   lfs: false
+2025-09-18T02:50:12.5187921Z   submodules: false
+2025-09-18T02:50:12.5188345Z   set-safe-directory: true
+2025-09-18T02:50:12.5189066Z ##[endgroup]
+2025-09-18T02:50:12.6899732Z Syncing repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.6901631Z ##[group]Getting Git version info
+2025-09-18T02:50:12.6902409Z Working directory is 'D:\a\Auto-SDDL\Auto-SDDL'
+2025-09-18T02:50:12.8121629Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-09-18T02:50:13.2659325Z git version 2.51.0.windows.1
+2025-09-18T02:50:13.2710278Z ##[endgroup]
+2025-09-18T02:50:13.2733440Z Temporarily overriding HOME='D:\a\_temp\68eff3a5-ad63-46da-9b45-566b56c10885' before making global git config changes
+2025-09-18T02:50:13.2736460Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-18T02:50:13.2746369Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Auto-SDDL\Auto-SDDL
+2025-09-18T02:50:13.3823108Z Deleting the contents of 'D:\a\Auto-SDDL\Auto-SDDL'
+2025-09-18T02:50:13.3830650Z ##[group]Initializing the repository
+2025-09-18T02:50:13.3841311Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\Auto-SDDL\Auto-SDDL
+2025-09-18T02:50:13.5030121Z Initialized empty Git repository in D:/a/Auto-SDDL/Auto-SDDL/.git/
+2025-09-18T02:50:13.5075746Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:13.5586839Z ##[endgroup]
+2025-09-18T02:50:13.5588253Z ##[group]Disabling automatic garbage collection
+2025-09-18T02:50:13.5596256Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2025-09-18T02:50:13.5852031Z ##[endgroup]
+2025-09-18T02:50:13.5853571Z ##[group]Setting up auth
+2025-09-18T02:50:13.5866257Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-09-18T02:50:13.6110094Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-09-18T02:50:15.2806911Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-18T02:50:15.3037642Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-09-18T02:50:15.7692849Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2025-09-18T02:50:15.7955064Z ##[endgroup]
+2025-09-18T02:50:15.7955931Z ##[group]Fetching the repository
+2025-09-18T02:50:15.7969815Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b84b45c0cef294b5540824f0fb5293dd50da4b77:refs/remotes/origin/main
+2025-09-18T02:50:17.1284515Z From https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:17.1285407Z  * [new ref]         b84b45c0cef294b5540824f0fb5293dd50da4b77 -> origin/main
+2025-09-18T02:50:17.1619153Z ##[endgroup]
+2025-09-18T02:50:17.1619865Z ##[group]Determining the checkout info
+2025-09-18T02:50:17.1621658Z ##[endgroup]
+2025-09-18T02:50:17.1634907Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2025-09-18T02:50:17.2098914Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2025-09-18T02:50:17.2359220Z ##[group]Checking out the ref
+2025-09-18T02:50:17.2369469Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B main refs/remotes/origin/main
+2025-09-18T02:50:17.3246494Z branch 'main' set up to track 'origin/main'.
+2025-09-18T02:50:17.3252929Z Switched to a new branch 'main'
+2025-09-18T02:50:17.3284332Z ##[endgroup]
+2025-09-18T02:50:17.3628594Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2025-09-18T02:50:17.3849548Z b84b45c0cef294b5540824f0fb5293dd50da4b77
+2025-09-18T02:50:17.4251473Z ##[group]Run actions/setup-python@v5
+2025-09-18T02:50:17.4251826Z with:
+2025-09-18T02:50:17.4252028Z   python-version: 3.11
+2025-09-18T02:50:17.4252219Z   cache: pip
+2025-09-18T02:50:17.4252379Z   check-latest: false
+2025-09-18T02:50:17.4252766Z   token: ***
+2025-09-18T02:50:17.4252983Z   update-environment: true
+2025-09-18T02:50:17.4253199Z   allow-prereleases: false
+2025-09-18T02:50:17.4253389Z   freethreaded: false
+2025-09-18T02:50:17.4253607Z ##[endgroup]
+2025-09-18T02:50:17.6601197Z ##[group]Installed versions
+2025-09-18T02:50:17.6788190Z Successfully set up CPython (3.11.9)
+2025-09-18T02:50:17.6789400Z ##[endgroup]
+2025-09-18T02:50:22.0262284Z pip cache is not found
+2025-09-18T02:50:22.0564563Z ##[group]Run python -m pip install -U pip
+2025-09-18T02:50:22.0565699Z [36;1mpython -m pip install -U pip[0m
+2025-09-18T02:50:22.0565967Z [36;1mpip install -r requirements.txt[0m
+2025-09-18T02:50:22.0566219Z [36;1mpip install pyinstaller[0m
+2025-09-18T02:50:22.1087910Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2025-09-18T02:50:22.1088277Z env:
+2025-09-18T02:50:22.1088534Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1089003Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+2025-09-18T02:50:22.1089441Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1089837Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1090233Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2025-09-18T02:50:22.1090536Z ##[endgroup]
+2025-09-18T02:50:24.6665334Z ##[error]The operation was canceled.
+2025-09-18T02:50:24.7416635Z Post job cleanup.
+2025-09-18T02:50:25.0361635Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-09-18T02:50:25.0584733Z git version 2.51.0.windows.1
+2025-09-18T02:50:25.0656077Z Temporarily overriding HOME='D:\a\_temp\e4a0b81a-34a7-4736-ab8d-cab28dc1e686' before making global git config changes
+2025-09-18T02:50:25.0656868Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-18T02:50:25.0668151Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Auto-SDDL\Auto-SDDL
+2025-09-18T02:50:25.0918971Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-09-18T02:50:25.1159749Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-09-18T02:50:25.6389956Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-18T02:50:25.6604871Z http.https://github.com/.extraheader
+2025-09-18T02:50:25.6646733Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+2025-09-18T02:50:25.6916263Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-09-18T02:50:26.1717500Z Cleaning up orphan processes

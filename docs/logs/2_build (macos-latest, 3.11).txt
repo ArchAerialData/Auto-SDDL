@@ -1,0 +1,243 @@
+﻿2025-09-18T02:50:10.0665070Z Current runner version: '2.328.0'
+2025-09-18T02:50:10.0692150Z ##[group]Runner Image Provisioner
+2025-09-18T02:50:10.0693440Z Hosted Compute Agent
+2025-09-18T02:50:10.0694390Z Version: 20250912.392
+2025-09-18T02:50:10.0694820Z Commit: d921fda672a98b64f4f82364647e2f10b2267d0b
+2025-09-18T02:50:10.0695290Z Build Date: 2025-09-12T15:23:14Z
+2025-09-18T02:50:10.0695690Z ##[endgroup]
+2025-09-18T02:50:10.0696070Z ##[group]Operating System
+2025-09-18T02:50:10.0696470Z macOS
+2025-09-18T02:50:10.0696840Z 15.6
+2025-09-18T02:50:10.0697150Z 24G84
+2025-09-18T02:50:10.0697490Z ##[endgroup]
+2025-09-18T02:50:10.0697830Z ##[group]Runner Image
+2025-09-18T02:50:10.0698180Z Image: macos-15-arm64
+2025-09-18T02:50:10.0698550Z Version: 20250911.2324
+2025-09-18T02:50:10.0699260Z Included Software: https://github.com/actions/runner-images/blob/macos-15-arm64/20250911.2324/images/macos/macos-15-arm64-Readme.md
+2025-09-18T02:50:10.0700430Z Image Release: https://github.com/actions/runner-images/releases/tag/macos-15-arm64%2F20250911.2324
+2025-09-18T02:50:10.0701090Z ##[endgroup]
+2025-09-18T02:50:10.0702780Z ##[group]GITHUB_TOKEN Permissions
+2025-09-18T02:50:10.0704560Z Actions: write
+2025-09-18T02:50:10.0704990Z Attestations: write
+2025-09-18T02:50:10.0705330Z Checks: write
+2025-09-18T02:50:10.0705660Z Contents: write
+2025-09-18T02:50:10.0705990Z Deployments: write
+2025-09-18T02:50:10.0706370Z Discussions: write
+2025-09-18T02:50:10.0706700Z Issues: write
+2025-09-18T02:50:10.0707030Z Metadata: read
+2025-09-18T02:50:10.0707390Z Models: read
+2025-09-18T02:50:10.0707730Z Packages: write
+2025-09-18T02:50:10.0708110Z Pages: write
+2025-09-18T02:50:10.0708440Z PullRequests: write
+2025-09-18T02:50:10.0708810Z RepositoryProjects: write
+2025-09-18T02:50:10.0709180Z SecurityEvents: write
+2025-09-18T02:50:10.0709620Z Statuses: write
+2025-09-18T02:50:10.0709960Z ##[endgroup]
+2025-09-18T02:50:10.0711610Z Secret source: Actions
+2025-09-18T02:50:10.0712080Z Prepare workflow directory
+2025-09-18T02:50:10.1278860Z Prepare all required actions
+2025-09-18T02:50:10.1350350Z Getting action download info
+2025-09-18T02:50:10.4168260Z Download action repository 'actions/checkout@v4' (SHA:08eba0b27e820071cde6df949e0beb9ba4906955)
+2025-09-18T02:50:10.9485480Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2025-09-18T02:50:11.1481830Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2025-09-18T02:50:11.4142230Z Complete job name: build (macos-latest, 3.11)
+2025-09-18T02:50:11.4847360Z ##[group]Run actions/checkout@v4
+2025-09-18T02:50:11.4847980Z with:
+2025-09-18T02:50:11.4848340Z   repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:11.4849010Z   token: ***
+2025-09-18T02:50:11.4849320Z   ssh-strict: true
+2025-09-18T02:50:11.4849630Z   ssh-user: git
+2025-09-18T02:50:11.4850100Z   persist-credentials: true
+2025-09-18T02:50:11.4850450Z   clean: true
+2025-09-18T02:50:11.4850780Z   sparse-checkout-cone-mode: true
+2025-09-18T02:50:11.4851170Z   fetch-depth: 1
+2025-09-18T02:50:11.4851530Z   fetch-tags: false
+2025-09-18T02:50:11.4852130Z   show-progress: true
+2025-09-18T02:50:11.4852460Z   lfs: false
+2025-09-18T02:50:11.4852760Z   submodules: false
+2025-09-18T02:50:11.4853080Z   set-safe-directory: true
+2025-09-18T02:50:11.4853580Z ##[endgroup]
+2025-09-18T02:50:12.1290670Z Syncing repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.1293150Z ##[group]Getting Git version info
+2025-09-18T02:50:12.1294020Z Working directory is '/Users/runner/work/Auto-SDDL/Auto-SDDL'
+2025-09-18T02:50:12.1295040Z [command]/opt/homebrew/bin/git version
+2025-09-18T02:50:12.1531320Z git version 2.50.1
+2025-09-18T02:50:12.1986990Z ##[endgroup]
+2025-09-18T02:50:12.2205630Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/00e5294d-9b27-42da-9b64-f01c74f1a6d1/.gitconfig'
+2025-09-18T02:50:12.2244400Z Temporarily overriding HOME='/Users/runner/work/_temp/00e5294d-9b27-42da-9b64-f01c74f1a6d1' before making global git config changes
+2025-09-18T02:50:12.2328640Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-18T02:50:12.2338670Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Auto-SDDL/Auto-SDDL
+2025-09-18T02:50:12.2346140Z Deleting the contents of '/Users/runner/work/Auto-SDDL/Auto-SDDL'
+2025-09-18T02:50:12.2350480Z ##[group]Initializing the repository
+2025-09-18T02:50:12.2353620Z [command]/opt/homebrew/bin/git init /Users/runner/work/Auto-SDDL/Auto-SDDL
+2025-09-18T02:50:12.2358050Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-09-18T02:50:12.2362450Z hint: is subject to change. To configure the initial branch name to use in all
+2025-09-18T02:50:12.2367000Z hint: of your new repositories, which will suppress this warning, call:
+2025-09-18T02:50:12.2369740Z hint:
+2025-09-18T02:50:12.2371670Z hint: 	git config --global init.defaultBranch <name>
+2025-09-18T02:50:12.2373900Z hint:
+2025-09-18T02:50:12.2375970Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-09-18T02:50:12.2379150Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-09-18T02:50:12.2380660Z hint:
+2025-09-18T02:50:12.2381480Z hint: 	git branch -m <name>
+2025-09-18T02:50:12.2382360Z hint:
+2025-09-18T02:50:12.2383520Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-09-18T02:50:12.2385450Z Initialized empty Git repository in /Users/runner/work/Auto-SDDL/Auto-SDDL/.git/
+2025-09-18T02:50:12.2389010Z [command]/opt/homebrew/bin/git remote add origin https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.2406290Z ##[endgroup]
+2025-09-18T02:50:12.2407970Z ##[group]Disabling automatic garbage collection
+2025-09-18T02:50:12.2417650Z [command]/opt/homebrew/bin/git config --local gc.auto 0
+2025-09-18T02:50:12.2561030Z ##[endgroup]
+2025-09-18T02:50:12.2562770Z ##[group]Setting up auth
+2025-09-18T02:50:12.2566010Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-18T02:50:12.2779140Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-18T02:50:12.4594100Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-18T02:50:12.4646380Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-18T02:50:12.6413310Z [command]/opt/homebrew/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-09-18T02:50:12.6621100Z ##[endgroup]
+2025-09-18T02:50:12.6627450Z ##[group]Fetching the repository
+2025-09-18T02:50:12.6633870Z [command]/opt/homebrew/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b84b45c0cef294b5540824f0fb5293dd50da4b77:refs/remotes/origin/main
+2025-09-18T02:50:13.6306250Z From https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:13.6341800Z  * [new ref]         b84b45c0cef294b5540824f0fb5293dd50da4b77 -> origin/main
+2025-09-18T02:50:13.6466640Z ##[endgroup]
+2025-09-18T02:50:13.6504640Z ##[group]Determining the checkout info
+2025-09-18T02:50:13.6541010Z ##[endgroup]
+2025-09-18T02:50:13.6545750Z [command]/opt/homebrew/bin/git sparse-checkout disable
+2025-09-18T02:50:13.6550270Z [command]/opt/homebrew/bin/git config --local --unset-all extensions.worktreeConfig
+2025-09-18T02:50:13.6683910Z ##[group]Checking out the ref
+2025-09-18T02:50:13.6692470Z [command]/opt/homebrew/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-09-18T02:50:13.6981060Z Switched to a new branch 'main'
+2025-09-18T02:50:13.6990140Z branch 'main' set up to track 'origin/main'.
+2025-09-18T02:50:13.6995960Z ##[endgroup]
+2025-09-18T02:50:13.7101760Z [command]/opt/homebrew/bin/git log -1 --format=%H
+2025-09-18T02:50:13.7218240Z b84b45c0cef294b5540824f0fb5293dd50da4b77
+2025-09-18T02:50:13.7689950Z ##[group]Run actions/setup-python@v5
+2025-09-18T02:50:13.7690770Z with:
+2025-09-18T02:50:13.7691290Z   python-version: 3.11
+2025-09-18T02:50:13.7691880Z   cache: pip
+2025-09-18T02:50:13.7692410Z   check-latest: false
+2025-09-18T02:50:13.7693270Z   token: ***
+2025-09-18T02:50:13.7693810Z   update-environment: true
+2025-09-18T02:50:13.7694500Z   allow-prereleases: false
+2025-09-18T02:50:13.7695130Z   freethreaded: false
+2025-09-18T02:50:13.7695710Z ##[endgroup]
+2025-09-18T02:50:14.0354690Z ##[group]Installed versions
+2025-09-18T02:50:14.2099470Z Successfully set up CPython (3.11.9)
+2025-09-18T02:50:14.2166090Z ##[endgroup]
+2025-09-18T02:50:14.2685510Z [command]/Users/runner/hostedtoolcache/Python/3.11.9/arm64/bin/pip cache dir
+2025-09-18T02:50:15.3070710Z /Users/runner/Library/Caches/pip
+2025-09-18T02:50:15.5221000Z Cache hit for: setup-python-macOS-arm64-python-3.11.9-pip-cde450486042d3d44f0ed14b0ec822d47804985d9e20dbb0e2ab5454481ad519
+2025-09-18T02:50:15.9095670Z Received 15824318 of 15824318 (100.0%), 46.0 MBs/sec
+2025-09-18T02:50:15.9323530Z Cache Size: ~15 MB (15824318 B)
+2025-09-18T02:50:15.9427420Z [command]/opt/homebrew/bin/gtar -xf /Users/runner/work/_temp/b5cccd45-df9c-4d69-9ae8-f3ecff2c4b55/cache.tzst -P -C /Users/runner/work/Auto-SDDL/Auto-SDDL --delay-directory-restore --use-compress-program unzstd
+2025-09-18T02:50:16.1615160Z Cache restored successfully
+2025-09-18T02:50:16.1639960Z Cache restored from key: setup-python-macOS-arm64-python-3.11.9-pip-cde450486042d3d44f0ed14b0ec822d47804985d9e20dbb0e2ab5454481ad519
+2025-09-18T02:50:16.1873730Z ##[group]Run python -m pip install -U pip
+2025-09-18T02:50:16.1876120Z [36;1mpython -m pip install -U pip[0m
+2025-09-18T02:50:16.1876790Z [36;1mpip install -r requirements.txt[0m
+2025-09-18T02:50:16.1878050Z [36;1mpip install pyinstaller[0m
+2025-09-18T02:50:16.1983520Z shell: /bin/bash -e {0}
+2025-09-18T02:50:16.1983890Z env:
+2025-09-18T02:50:16.1984150Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1984710Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.11.9/arm64/lib/pkgconfig
+2025-09-18T02:50:16.1985140Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1985500Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1985850Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1986110Z ##[endgroup]
+2025-09-18T02:50:17.4355550Z Requirement already satisfied: pip in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (25.2)
+2025-09-18T02:50:18.0812160Z Collecting pywebview==4.4.1 (from -r requirements.txt (line 1))
+2025-09-18T02:50:18.0835510Z   Using cached pywebview-4.4.1-py3-none-any.whl.metadata (4.0 kB)
+2025-09-18T02:50:18.1040560Z Collecting openpyxl==3.1.5 (from -r requirements.txt (line 2))
+2025-09-18T02:50:18.1053210Z   Using cached openpyxl-3.1.5-py2.py3-none-any.whl.metadata (2.5 kB)
+2025-09-18T02:50:18.1176310Z Collecting python-docx==1.1.2 (from -r requirements.txt (line 3))
+2025-09-18T02:50:18.1191330Z   Using cached python_docx-1.1.2-py3-none-any.whl.metadata (2.0 kB)
+2025-09-18T02:50:18.1477540Z Collecting pyinstaller==6.10.0 (from -r requirements.txt (line 6))
+2025-09-18T02:50:18.1493300Z   Using cached pyinstaller-6.10.0-py3-none-macosx_10_13_universal2.whl.metadata (8.3 kB)
+2025-09-18T02:50:18.1640960Z Collecting proxy-tools (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.1642910Z   Using cached proxy_tools-0.1.0-py3-none-any.whl
+2025-09-18T02:50:18.1857750Z Collecting bottle (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.1889740Z   Using cached bottle-0.13.4-py2.py3-none-any.whl.metadata (1.6 kB)
+2025-09-18T02:50:18.2208230Z Collecting typing-extensions (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2227850Z   Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+2025-09-18T02:50:18.2473610Z Collecting pyobjc-core (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2500560Z   Using cached pyobjc_core-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.7 kB)
+2025-09-18T02:50:18.2701570Z Collecting pyobjc-framework-Cocoa (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2725310Z   Using cached pyobjc_framework_cocoa-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.5 kB)
+2025-09-18T02:50:18.2920190Z Collecting pyobjc-framework-WebKit (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2947170Z   Using cached pyobjc_framework_webkit-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.6 kB)
+2025-09-18T02:50:18.3188130Z Collecting pyobjc-framework-security (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.3204760Z   Using cached pyobjc_framework_security-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.4 kB)
+2025-09-18T02:50:18.3335690Z Collecting et-xmlfile (from openpyxl==3.1.5->-r requirements.txt (line 2))
+2025-09-18T02:50:18.3377850Z   Using cached et_xmlfile-2.0.0-py3-none-any.whl.metadata (2.7 kB)
+2025-09-18T02:50:18.4967230Z Collecting lxml>=3.1.0 (from python-docx==1.1.2->-r requirements.txt (line 3))
+2025-09-18T02:50:18.5070200Z   Using cached lxml-6.0.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (3.8 kB)
+2025-09-18T02:50:18.5170470Z Requirement already satisfied: setuptools>=42.0.0 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller==6.10.0->-r requirements.txt (line 6)) (65.5.0)
+2025-09-18T02:50:18.5275400Z Collecting altgraph (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5331100Z   Using cached altgraph-0.17.4-py2.py3-none-any.whl.metadata (7.3 kB)
+2025-09-18T02:50:18.5596690Z Collecting pyinstaller-hooks-contrib>=2024.8 (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5597710Z   Using cached pyinstaller_hooks_contrib-2025.8-py3-none-any.whl.metadata (16 kB)
+2025-09-18T02:50:18.5821380Z Collecting packaging>=22.0 (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5835640Z   Using cached packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+2025-09-18T02:50:18.5931840Z Collecting macholib>=1.8 (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5950460Z   Using cached macholib-1.16.3-py2.py3-none-any.whl.metadata (11 kB)
+2025-09-18T02:50:18.6093080Z Using cached pywebview-4.4.1-py3-none-any.whl (405 kB)
+2025-09-18T02:50:18.6110010Z Using cached openpyxl-3.1.5-py2.py3-none-any.whl (250 kB)
+2025-09-18T02:50:18.6126490Z Using cached python_docx-1.1.2-py3-none-any.whl (244 kB)
+2025-09-18T02:50:18.6146430Z Using cached pyinstaller-6.10.0-py3-none-macosx_10_13_universal2.whl (984 kB)
+2025-09-18T02:50:18.6168060Z Using cached lxml-6.0.1-cp311-cp311-macosx_10_9_universal2.whl (8.4 MB)
+2025-09-18T02:50:18.6824570Z Using cached macholib-1.16.3-py2.py3-none-any.whl (38 kB)
+2025-09-18T02:50:18.6928610Z Using cached altgraph-0.17.4-py2.py3-none-any.whl (21 kB)
+2025-09-18T02:50:18.7133490Z Using cached packaging-25.0-py3-none-any.whl (66 kB)
+2025-09-18T02:50:18.7243950Z Using cached pyinstaller_hooks_contrib-2025.8-py3-none-any.whl (442 kB)
+2025-09-18T02:50:18.7369540Z Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+2025-09-18T02:50:18.7475210Z Using cached bottle-0.13.4-py2.py3-none-any.whl (103 kB)
+2025-09-18T02:50:18.7576460Z Using cached et_xmlfile-2.0.0-py3-none-any.whl (18 kB)
+2025-09-18T02:50:18.7633310Z Using cached pyobjc_core-11.1-cp311-cp311-macosx_10_9_universal2.whl (671 kB)
+2025-09-18T02:50:18.7634320Z Using cached pyobjc_framework_cocoa-11.1-cp311-cp311-macosx_10_9_universal2.whl (388 kB)
+2025-09-18T02:50:18.7634930Z Using cached pyobjc_framework_security-11.1-cp311-cp311-macosx_10_9_universal2.whl (41 kB)
+2025-09-18T02:50:18.7644120Z Using cached pyobjc_framework_webkit-11.1-cp311-cp311-macosx_10_9_universal2.whl (51 kB)
+2025-09-18T02:50:18.7757140Z Installing collected packages: proxy-tools, bottle, altgraph, typing-extensions, pyobjc-core, packaging, macholib, lxml, et-xmlfile, python-docx, pyobjc-framework-Cocoa, pyinstaller-hooks-contrib, openpyxl, pyobjc-framework-WebKit, pyobjc-framework-security, pyinstaller, pywebview
+2025-09-18T02:50:21.3535360Z 
+2025-09-18T02:50:21.3559800Z Successfully installed altgraph-0.17.4 bottle-0.13.4 et-xmlfile-2.0.0 lxml-6.0.1 macholib-1.16.3 openpyxl-3.1.5 packaging-25.0 proxy-tools-0.1.0 pyinstaller-6.10.0 pyinstaller-hooks-contrib-2025.8 pyobjc-core-11.1 pyobjc-framework-Cocoa-11.1 pyobjc-framework-WebKit-11.1 pyobjc-framework-security-11.1 python-docx-1.1.2 pywebview-4.4.1 typing-extensions-4.15.0
+2025-09-18T02:50:21.9182680Z Requirement already satisfied: pyinstaller in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (6.10.0)
+2025-09-18T02:50:21.9209270Z Requirement already satisfied: setuptools>=42.0.0 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (65.5.0)
+2025-09-18T02:50:21.9212100Z Requirement already satisfied: altgraph in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (0.17.4)
+2025-09-18T02:50:21.9216020Z Requirement already satisfied: pyinstaller-hooks-contrib>=2024.8 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (2025.8)
+2025-09-18T02:50:21.9224400Z Requirement already satisfied: packaging>=22.0 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (25.0)
+2025-09-18T02:50:21.9231330Z Requirement already satisfied: macholib>=1.8 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (1.16.3)
+2025-09-18T02:50:22.0216020Z ##[group]Run if [[ "macos-latest" == "macos-latest" ]]; then
+2025-09-18T02:50:22.0216660Z [36;1mif [[ "macos-latest" == "macos-latest" ]]; then[0m
+2025-09-18T02:50:22.0217060Z [36;1m  pyinstaller --clean -y --target-arch universal2 app.spec[0m
+2025-09-18T02:50:22.0217420Z [36;1melse[0m
+2025-09-18T02:50:22.0217730Z [36;1m  pyinstaller --clean -y app.spec[0m
+2025-09-18T02:50:22.0218060Z [36;1mfi[0m
+2025-09-18T02:50:22.0308550Z shell: /bin/bash -e {0}
+2025-09-18T02:50:22.0308820Z env:
+2025-09-18T02:50:22.0309170Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0309790Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.11.9/arm64/lib/pkgconfig
+2025-09-18T02:50:22.0310300Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0310760Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0311450Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:22.0311810Z ##[endgroup]
+2025-09-18T02:50:22.2157830Z 79 INFO: PyInstaller: 6.10.0, contrib hooks: 2025.8
+2025-09-18T02:50:22.2159860Z 79 INFO: Python: 3.11.9
+2025-09-18T02:50:22.2346930Z 98 INFO: Platform: macOS-15.6-arm64-arm-64bit
+2025-09-18T02:50:22.2349490Z 98 INFO: Python environment: /Library/Frameworks/Python.framework/Versions/3.11
+2025-09-18T02:50:22.2350060Z option(s) not allowed:
+2025-09-18T02:50:22.2350380Z   --target-architecture/--target-arch
+2025-09-18T02:50:22.2350760Z makespec options not valid when a .spec file is given
+2025-09-18T02:50:22.2814060Z ##[error]Process completed with exit code 1.
+2025-09-18T02:50:22.2999220Z Post job cleanup.
+2025-09-18T02:50:22.4311490Z [command]/opt/homebrew/bin/git version
+2025-09-18T02:50:22.4433860Z git version 2.50.1
+2025-09-18T02:50:22.4490920Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/19015360-bd76-4402-b4c6-05fcadb7859f/.gitconfig'
+2025-09-18T02:50:22.4502460Z Temporarily overriding HOME='/Users/runner/work/_temp/19015360-bd76-4402-b4c6-05fcadb7859f' before making global git config changes
+2025-09-18T02:50:22.4504290Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-18T02:50:22.4513160Z [command]/opt/homebrew/bin/git config --global --add safe.directory /Users/runner/work/Auto-SDDL/Auto-SDDL
+2025-09-18T02:50:22.4629530Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-09-18T02:50:22.4717280Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-09-18T02:50:22.6018640Z [command]/opt/homebrew/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-18T02:50:22.6072250Z http.https://github.com/.extraheader
+2025-09-18T02:50:22.6081160Z [command]/opt/homebrew/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-09-18T02:50:22.6146850Z [command]/opt/homebrew/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-09-18T02:50:22.7055880Z Cleaning up orphan processes

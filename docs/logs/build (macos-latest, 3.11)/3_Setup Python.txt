@@ -1,0 +1,21 @@
+﻿2025-09-18T02:50:13.7689910Z ##[group]Run actions/setup-python@v5
+2025-09-18T02:50:13.7690770Z with:
+2025-09-18T02:50:13.7691290Z   python-version: 3.11
+2025-09-18T02:50:13.7691870Z   cache: pip
+2025-09-18T02:50:13.7692410Z   check-latest: false
+2025-09-18T02:50:13.7693260Z   token: ***
+2025-09-18T02:50:13.7693810Z   update-environment: true
+2025-09-18T02:50:13.7694500Z   allow-prereleases: false
+2025-09-18T02:50:13.7695130Z   freethreaded: false
+2025-09-18T02:50:13.7695710Z ##[endgroup]
+2025-09-18T02:50:14.0354540Z ##[group]Installed versions
+2025-09-18T02:50:14.2099190Z Successfully set up CPython (3.11.9)
+2025-09-18T02:50:14.2166010Z ##[endgroup]
+2025-09-18T02:50:14.2685400Z [command]/Users/runner/hostedtoolcache/Python/3.11.9/arm64/bin/pip cache dir
+2025-09-18T02:50:15.3070620Z /Users/runner/Library/Caches/pip
+2025-09-18T02:50:15.5220940Z Cache hit for: setup-python-macOS-arm64-python-3.11.9-pip-cde450486042d3d44f0ed14b0ec822d47804985d9e20dbb0e2ab5454481ad519
+2025-09-18T02:50:15.9095380Z Received 15824318 of 15824318 (100.0%), 46.0 MBs/sec
+2025-09-18T02:50:15.9323440Z Cache Size: ~15 MB (15824318 B)
+2025-09-18T02:50:15.9427310Z [command]/opt/homebrew/bin/gtar -xf /Users/runner/work/_temp/b5cccd45-df9c-4d69-9ae8-f3ecff2c4b55/cache.tzst -P -C /Users/runner/work/Auto-SDDL/Auto-SDDL --delay-directory-restore --use-compress-program unzstd
+2025-09-18T02:50:16.1615070Z Cache restored successfully
+2025-09-18T02:50:16.1639890Z Cache restored from key: setup-python-macOS-arm64-python-3.11.9-pip-cde450486042d3d44f0ed14b0ec822d47804985d9e20dbb0e2ab5454481ad519

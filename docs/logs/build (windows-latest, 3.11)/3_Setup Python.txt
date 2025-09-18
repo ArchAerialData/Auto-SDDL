@@ -1,0 +1,14 @@
+﻿2025-09-18T02:50:17.4251444Z ##[group]Run actions/setup-python@v5
+2025-09-18T02:50:17.4251821Z with:
+2025-09-18T02:50:17.4252024Z   python-version: 3.11
+2025-09-18T02:50:17.4252216Z   cache: pip
+2025-09-18T02:50:17.4252377Z   check-latest: false
+2025-09-18T02:50:17.4252763Z   token: ***
+2025-09-18T02:50:17.4252980Z   update-environment: true
+2025-09-18T02:50:17.4253196Z   allow-prereleases: false
+2025-09-18T02:50:17.4253387Z   freethreaded: false
+2025-09-18T02:50:17.4253604Z ##[endgroup]
+2025-09-18T02:50:17.6601162Z ##[group]Installed versions
+2025-09-18T02:50:17.6788144Z Successfully set up CPython (3.11.9)
+2025-09-18T02:50:17.6789384Z ##[endgroup]
+2025-09-18T02:50:22.0262235Z pip cache is not found

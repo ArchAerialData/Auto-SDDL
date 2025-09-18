@@ -1,0 +1,73 @@
+﻿2025-09-18T02:50:16.1873680Z ##[group]Run python -m pip install -U pip
+2025-09-18T02:50:16.1876110Z [36;1mpython -m pip install -U pip[0m
+2025-09-18T02:50:16.1876780Z [36;1mpip install -r requirements.txt[0m
+2025-09-18T02:50:16.1878030Z [36;1mpip install pyinstaller[0m
+2025-09-18T02:50:16.1983490Z shell: /bin/bash -e {0}
+2025-09-18T02:50:16.1983890Z env:
+2025-09-18T02:50:16.1984150Z   pythonLocation: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1984690Z   PKG_CONFIG_PATH: /Users/runner/hostedtoolcache/Python/3.11.9/arm64/lib/pkgconfig
+2025-09-18T02:50:16.1985140Z   Python_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1985500Z   Python2_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1985850Z   Python3_ROOT_DIR: /Users/runner/hostedtoolcache/Python/3.11.9/arm64
+2025-09-18T02:50:16.1986100Z ##[endgroup]
+2025-09-18T02:50:17.4355270Z Requirement already satisfied: pip in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (25.2)
+2025-09-18T02:50:18.0812120Z Collecting pywebview==4.4.1 (from -r requirements.txt (line 1))
+2025-09-18T02:50:18.0835450Z   Using cached pywebview-4.4.1-py3-none-any.whl.metadata (4.0 kB)
+2025-09-18T02:50:18.1040490Z Collecting openpyxl==3.1.5 (from -r requirements.txt (line 2))
+2025-09-18T02:50:18.1053190Z   Using cached openpyxl-3.1.5-py2.py3-none-any.whl.metadata (2.5 kB)
+2025-09-18T02:50:18.1176250Z Collecting python-docx==1.1.2 (from -r requirements.txt (line 3))
+2025-09-18T02:50:18.1191310Z   Using cached python_docx-1.1.2-py3-none-any.whl.metadata (2.0 kB)
+2025-09-18T02:50:18.1477480Z Collecting pyinstaller==6.10.0 (from -r requirements.txt (line 6))
+2025-09-18T02:50:18.1493240Z   Using cached pyinstaller-6.10.0-py3-none-macosx_10_13_universal2.whl.metadata (8.3 kB)
+2025-09-18T02:50:18.1640910Z Collecting proxy-tools (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.1642900Z   Using cached proxy_tools-0.1.0-py3-none-any.whl
+2025-09-18T02:50:18.1857640Z Collecting bottle (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.1889690Z   Using cached bottle-0.13.4-py2.py3-none-any.whl.metadata (1.6 kB)
+2025-09-18T02:50:18.2208190Z Collecting typing-extensions (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2227690Z   Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+2025-09-18T02:50:18.2473550Z Collecting pyobjc-core (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2500520Z   Using cached pyobjc_core-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.7 kB)
+2025-09-18T02:50:18.2701510Z Collecting pyobjc-framework-Cocoa (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2725240Z   Using cached pyobjc_framework_cocoa-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.5 kB)
+2025-09-18T02:50:18.2919850Z Collecting pyobjc-framework-WebKit (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.2947100Z   Using cached pyobjc_framework_webkit-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.6 kB)
+2025-09-18T02:50:18.3188070Z Collecting pyobjc-framework-security (from pywebview==4.4.1->-r requirements.txt (line 1))
+2025-09-18T02:50:18.3204690Z   Using cached pyobjc_framework_security-11.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (2.4 kB)
+2025-09-18T02:50:18.3335590Z Collecting et-xmlfile (from openpyxl==3.1.5->-r requirements.txt (line 2))
+2025-09-18T02:50:18.3377670Z   Using cached et_xmlfile-2.0.0-py3-none-any.whl.metadata (2.7 kB)
+2025-09-18T02:50:18.4967160Z Collecting lxml>=3.1.0 (from python-docx==1.1.2->-r requirements.txt (line 3))
+2025-09-18T02:50:18.5070130Z   Using cached lxml-6.0.1-cp311-cp311-macosx_10_9_universal2.whl.metadata (3.8 kB)
+2025-09-18T02:50:18.5170430Z Requirement already satisfied: setuptools>=42.0.0 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller==6.10.0->-r requirements.txt (line 6)) (65.5.0)
+2025-09-18T02:50:18.5273380Z Collecting altgraph (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5331050Z   Using cached altgraph-0.17.4-py2.py3-none-any.whl.metadata (7.3 kB)
+2025-09-18T02:50:18.5596650Z Collecting pyinstaller-hooks-contrib>=2024.8 (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5597710Z   Using cached pyinstaller_hooks_contrib-2025.8-py3-none-any.whl.metadata (16 kB)
+2025-09-18T02:50:18.5821340Z Collecting packaging>=22.0 (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5835600Z   Using cached packaging-25.0-py3-none-any.whl.metadata (3.3 kB)
+2025-09-18T02:50:18.5931780Z Collecting macholib>=1.8 (from pyinstaller==6.10.0->-r requirements.txt (line 6))
+2025-09-18T02:50:18.5950420Z   Using cached macholib-1.16.3-py2.py3-none-any.whl.metadata (11 kB)
+2025-09-18T02:50:18.6093020Z Using cached pywebview-4.4.1-py3-none-any.whl (405 kB)
+2025-09-18T02:50:18.6109960Z Using cached openpyxl-3.1.5-py2.py3-none-any.whl (250 kB)
+2025-09-18T02:50:18.6126250Z Using cached python_docx-1.1.2-py3-none-any.whl (244 kB)
+2025-09-18T02:50:18.6146350Z Using cached pyinstaller-6.10.0-py3-none-macosx_10_13_universal2.whl (984 kB)
+2025-09-18T02:50:18.6167990Z Using cached lxml-6.0.1-cp311-cp311-macosx_10_9_universal2.whl (8.4 MB)
+2025-09-18T02:50:18.6824500Z Using cached macholib-1.16.3-py2.py3-none-any.whl (38 kB)
+2025-09-18T02:50:18.6928560Z Using cached altgraph-0.17.4-py2.py3-none-any.whl (21 kB)
+2025-09-18T02:50:18.7133420Z Using cached packaging-25.0-py3-none-any.whl (66 kB)
+2025-09-18T02:50:18.7243910Z Using cached pyinstaller_hooks_contrib-2025.8-py3-none-any.whl (442 kB)
+2025-09-18T02:50:18.7369500Z Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+2025-09-18T02:50:18.7475170Z Using cached bottle-0.13.4-py2.py3-none-any.whl (103 kB)
+2025-09-18T02:50:18.7576430Z Using cached et_xmlfile-2.0.0-py3-none-any.whl (18 kB)
+2025-09-18T02:50:18.7633270Z Using cached pyobjc_core-11.1-cp311-cp311-macosx_10_9_universal2.whl (671 kB)
+2025-09-18T02:50:18.7634290Z Using cached pyobjc_framework_cocoa-11.1-cp311-cp311-macosx_10_9_universal2.whl (388 kB)
+2025-09-18T02:50:18.7634930Z Using cached pyobjc_framework_security-11.1-cp311-cp311-macosx_10_9_universal2.whl (41 kB)
+2025-09-18T02:50:18.7644070Z Using cached pyobjc_framework_webkit-11.1-cp311-cp311-macosx_10_9_universal2.whl (51 kB)
+2025-09-18T02:50:18.7757070Z Installing collected packages: proxy-tools, bottle, altgraph, typing-extensions, pyobjc-core, packaging, macholib, lxml, et-xmlfile, python-docx, pyobjc-framework-Cocoa, pyinstaller-hooks-contrib, openpyxl, pyobjc-framework-WebKit, pyobjc-framework-security, pyinstaller, pywebview
+2025-09-18T02:50:21.3535240Z 
+2025-09-18T02:50:21.3559550Z Successfully installed altgraph-0.17.4 bottle-0.13.4 et-xmlfile-2.0.0 lxml-6.0.1 macholib-1.16.3 openpyxl-3.1.5 packaging-25.0 proxy-tools-0.1.0 pyinstaller-6.10.0 pyinstaller-hooks-contrib-2025.8 pyobjc-core-11.1 pyobjc-framework-Cocoa-11.1 pyobjc-framework-WebKit-11.1 pyobjc-framework-security-11.1 python-docx-1.1.2 pywebview-4.4.1 typing-extensions-4.15.0
+2025-09-18T02:50:21.9182610Z Requirement already satisfied: pyinstaller in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (6.10.0)
+2025-09-18T02:50:21.9209200Z Requirement already satisfied: setuptools>=42.0.0 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (65.5.0)
+2025-09-18T02:50:21.9212100Z Requirement already satisfied: altgraph in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (0.17.4)
+2025-09-18T02:50:21.9216000Z Requirement already satisfied: pyinstaller-hooks-contrib>=2024.8 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (2025.8)
+2025-09-18T02:50:21.9224370Z Requirement already satisfied: packaging>=22.0 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (25.0)
+2025-09-18T02:50:21.9230030Z Requirement already satisfied: macholib>=1.8 in /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages (from pyinstaller) (1.16.3)

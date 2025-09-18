@@ -1,0 +1,57 @@
+﻿2025-09-18T02:50:12.5179208Z ##[group]Run actions/checkout@v4
+2025-09-18T02:50:12.5180839Z with:
+2025-09-18T02:50:12.5181419Z   repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.5182465Z   token: ***
+2025-09-18T02:50:12.5182968Z   ssh-strict: true
+2025-09-18T02:50:12.5183485Z   ssh-user: git
+2025-09-18T02:50:12.5184007Z   persist-credentials: true
+2025-09-18T02:50:12.5184603Z   clean: true
+2025-09-18T02:50:12.5185116Z   sparse-checkout-cone-mode: true
+2025-09-18T02:50:12.5185875Z   fetch-depth: 1
+2025-09-18T02:50:12.5186380Z   fetch-tags: false
+2025-09-18T02:50:12.5186934Z   show-progress: true
+2025-09-18T02:50:12.5187456Z   lfs: false
+2025-09-18T02:50:12.5187917Z   submodules: false
+2025-09-18T02:50:12.5188341Z   set-safe-directory: true
+2025-09-18T02:50:12.5189057Z ##[endgroup]
+2025-09-18T02:50:12.6899663Z Syncing repository: ArchAerialData/Auto-SDDL
+2025-09-18T02:50:12.6901607Z ##[group]Getting Git version info
+2025-09-18T02:50:12.6902315Z Working directory is 'D:\a\Auto-SDDL\Auto-SDDL'
+2025-09-18T02:50:12.8121554Z [command]"C:\Program Files\Git\bin\git.exe" version
+2025-09-18T02:50:13.2659221Z git version 2.51.0.windows.1
+2025-09-18T02:50:13.2710197Z ##[endgroup]
+2025-09-18T02:50:13.2733376Z Temporarily overriding HOME='D:\a\_temp\68eff3a5-ad63-46da-9b45-566b56c10885' before making global git config changes
+2025-09-18T02:50:13.2736431Z Adding repository directory to the temporary git global config as a safe directory
+2025-09-18T02:50:13.2746337Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Auto-SDDL\Auto-SDDL
+2025-09-18T02:50:13.3823017Z Deleting the contents of 'D:\a\Auto-SDDL\Auto-SDDL'
+2025-09-18T02:50:13.3830601Z ##[group]Initializing the repository
+2025-09-18T02:50:13.3841259Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\Auto-SDDL\Auto-SDDL
+2025-09-18T02:50:13.5030014Z Initialized empty Git repository in D:/a/Auto-SDDL/Auto-SDDL/.git/
+2025-09-18T02:50:13.5075612Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:13.5586786Z ##[endgroup]
+2025-09-18T02:50:13.5588243Z ##[group]Disabling automatic garbage collection
+2025-09-18T02:50:13.5596205Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2025-09-18T02:50:13.5851961Z ##[endgroup]
+2025-09-18T02:50:13.5853563Z ##[group]Setting up auth
+2025-09-18T02:50:13.5866220Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2025-09-18T02:50:13.6110006Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2025-09-18T02:50:15.2806845Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-09-18T02:50:15.3037520Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2025-09-18T02:50:15.7692774Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2025-09-18T02:50:15.7954995Z ##[endgroup]
+2025-09-18T02:50:15.7955914Z ##[group]Fetching the repository
+2025-09-18T02:50:15.7969779Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b84b45c0cef294b5540824f0fb5293dd50da4b77:refs/remotes/origin/main
+2025-09-18T02:50:17.1284409Z From https://github.com/ArchAerialData/Auto-SDDL
+2025-09-18T02:50:17.1285388Z  * [new ref]         b84b45c0cef294b5540824f0fb5293dd50da4b77 -> origin/main
+2025-09-18T02:50:17.1619069Z ##[endgroup]
+2025-09-18T02:50:17.1619852Z ##[group]Determining the checkout info
+2025-09-18T02:50:17.1621599Z ##[endgroup]
+2025-09-18T02:50:17.1632485Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2025-09-18T02:50:17.2098838Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2025-09-18T02:50:17.2359143Z ##[group]Checking out the ref
+2025-09-18T02:50:17.2369413Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B main refs/remotes/origin/main
+2025-09-18T02:50:17.3246455Z branch 'main' set up to track 'origin/main'.
+2025-09-18T02:50:17.3252900Z Switched to a new branch 'main'
+2025-09-18T02:50:17.3284310Z ##[endgroup]
+2025-09-18T02:50:17.3628554Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2025-09-18T02:50:17.3849509Z b84b45c0cef294b5540824f0fb5293dd50da4b77

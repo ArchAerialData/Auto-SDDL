@@ -1,0 +1,5 @@
+2025-09-18T02:50:07.4070000Z Requested labels: windows-latest
+2025-09-18T02:50:07.4070000Z Job defined at: ArchAerialData/Auto-SDDL/.github/workflows/build-release.yml@refs/heads/main
+2025-09-18T02:50:07.4070000Z Waiting for a runner to pick up this job...
+2025-09-18T02:50:07.4100000Z Job is waiting for a hosted runner to come online.
+2025-09-18T02:50:07.4080000Z Job is about to start running on the hosted runner: GitHub Actions 1000000114
