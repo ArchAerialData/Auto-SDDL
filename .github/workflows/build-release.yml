@@ -51,7 +51,16 @@ jobs:
         shell: pwsh
         run: |
           if (Test-Path 'dist\FormGen-windows.zip') { Remove-Item 'dist\FormGen-windows.zip' -Force }
-          Compress-Archive -Path 'dist\FormGen' -DestinationPath 'dist\FormGen-windows.zip' -Force
+          $dir = 'dist\\FormGen'
+          $exe = 'dist\\FormGen.exe'
+          if (Test-Path $dir) {
+            Compress-Archive -Path $dir -DestinationPath 'dist\FormGen-windows.zip' -Force
+          } elseif (Test-Path $exe) {
+            Compress-Archive -Path $exe -DestinationPath 'dist\FormGen-windows.zip' -Force
+          } else {
+            Get-ChildItem dist -Recurse | Format-List -Force | Out-String | Write-Output
+            throw "PyInstaller output not found: expected 'dist\\FormGen' or 'dist\\FormGen.exe'"
+          }
 
       - name: Upload Windows artifact
         if: matrix.os == 'windows-latest'
@@ -65,7 +74,14 @@ jobs:
         if: matrix.os == 'macos-latest'
         shell: bash
         run: |
-          hdiutil create -volname 'FormGen' -srcfolder './dist/FormGen.app' -ov -format UDZO 'dist/FormGen-macos.dmg'
+          set -euxo pipefail
+          APP_DIR="./dist/FormGen.app"
+          if [ ! -e "$APP_DIR" ]; then
+            # Fallback: if PyInstaller emitted onedir without BUNDLE, try folder
+            ALT_APP="./dist/FormGen"
+            if [ -d "$ALT_APP" ]; then APP_DIR="$ALT_APP"; else ls -laR ./dist; echo "No FormGen.app found"; exit 1; fi
+          fi
+          hdiutil create -volname 'FormGen' -srcfolder "$APP_DIR" -ov -format UDZO 'dist/FormGen-macos.dmg'
 
       - name: Upload macOS artifact
         if: matrix.os == 'macos-latest'
