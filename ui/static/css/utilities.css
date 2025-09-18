@@ -1,2 +1,57 @@
-/* placeholder theme css */
+/* Lightweight utility classes to eliminate inline styles */
+
+/* Sizing */
+.max-w-340 {
+    max-width: 340px !important;
+}
+
+.max-w-280 {
+    max-width: 280px !important;
+}
+
+.w-60px {
+    width: 60px !important;
+}
+
+.w-80px {
+    width: 80px !important;
+}
+
+.w-120px {
+    width: 120px !important;
+}
+
+.w-0 {
+    width: 0% !important;
+}
+
+.h-44 {
+    height: 44px !important;
+}
+
+.max-h-400 {
+    max-height: 400px !important;
+    overflow-y: auto;
+}
+
+/* Progress bar small height */
+.progress-sm {
+    height: 18px !important;
+}
+
+/* Layout helpers */
+.flex-center {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.overflow-hidden {
+    overflow: hidden !important;
+}
+
+.pre-ellipsis {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
 

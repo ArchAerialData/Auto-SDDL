@@ -1,2 +1,54 @@
-/* placeholder theme css */
+/* Isolated App Header Theme
+   Configure gradient and animation via CSS variables below
+*/
+
+:root {
+    --app-header-bg: var(--brand-blue);
+    --app-header-gradient: linear-gradient(100deg,
+            var(--brand-blue) 0%,
+            #0a3d91 40%,
+            var(--dark-bg) 70%,
+            #2a2a2a 100%);
+    --app-header-gradient-speed: 28s;
+    /* App header (top bar) — tune independently */
+    --app-header-pad-y: 1.52rem;
+    /* vertical padding */
+    --app-header-pad-x: 1rem;
+    /* horizontal padding */
+    --app-header-border-bottom: 1px;
+    --app-header-border-left: 1px;
+}
+
+.app-header {
+    background-color: var(--app-header-bg);
+    background-image: var(--app-header-gradient);
+    background-size: 180% 180%;
+    border-bottom: var(--app-header-border-bottom) solid var(--border-color);
+    border-left: var(--app-header-border-left) solid var(--border-color);
+    padding: var(--app-header-pad-y) var(--app-header-pad-x);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .app-header {
+        animation: headerGradientShift var(--app-header-gradient-speed) ease-in-out infinite;
+        will-change: background-position;
+    }
+}
+
+@keyframes headerGradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
 

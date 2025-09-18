@@ -1,2 +1,105 @@
-/* placeholder theme css */
+/* Isolated Sidebar Theme: aligns local GUI with website styling */
+
+.sidebar {
+    width: 280px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: var(--sidebar-header-pad-y) var(--sidebar-header-pad-x);
+    border-bottom: var(--sidebar-header-border-bottom) solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.sidebar-brand i {
+    font-size: 1.5rem;
+}
+
+.brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.brand-text {
+    white-space: nowrap;
+}
+
+.sidebar-content {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link {
+    color: var(--text-secondary);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(94, 106, 139, 0.11);
+    color: var(--text-primary);
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--primary-blue);
+    color: #fff;
+}
+
+.sidebar .nav-link i {
+    width: 1.25rem;
+    text-align: center;
+}
+
+.sidebar-divider {
+    border-color: var(--border-color);
+    margin: 1rem 0;
+}
+
+.sidebar-section {
+    padding: 0 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* Sidebar specific variables (tune independently from app header) */
+:root {
+    --sidebar-header-pad-y: 1.30rem;
+    --sidebar-header-pad-x: 1rem;
+    --sidebar-header-border-bottom: 1px;
+}
 

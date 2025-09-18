@@ -1,25 +1,149 @@
 {
   "title": "FormGen",
-  "version": 2,
+  "version": 3,
   "fields": [
-    { "key": "client", "label": "Client", "type": "text", "required": true },
-    { "key": "project_name", "label": "Project Name", "type": "text", "required": true },
-    { "key": "deliverables", "label": "Deliverables", "type": "multiselect", "options": [], "allow_custom": true, "required": false },
-    { "key": "watermarks", "label": "Watermark(s)", "type": "text", "required": false },
-    { "key": "deliverables_uploads", "label": "Deliverables Upload(s)", "type": "multiselect", "options": ["Dropbox", "Procor", "DroneDeploy", "DroneworkAdvisor"], "allow_custom": true, "required": false },
-    { "key": "ops_contact_emails", "label": "Operations Contact Email", "type": "textarea", "placeholder": "Separate multiple emails with ';' or ','", "required": false },
-    { "key": "ops_contact_title", "label": "Operations Contact Title", "type": "text", "required": false },
-    { "key": "ops_contact_name", "label": "Name", "type": "text", "required": false },
-    { "key": "location", "label": "Location", "type": "text", "required": false },
-    { "key": "project_address", "label": "Project Address", "type": "text", "required": false },
-    { "key": "survey_frequency", "label": "Survey Frequency", "type": "multiselect", "options": ["One-time", "Weekly", "Monthly", "Quarterly"], "required": false },
-    { "key": "duration", "label": "Duration", "type": "text", "required": false },
-    { "key": "ap_contact", "label": "Accounts Payable Contact", "type": "text", "required": false },
-    { "key": "ap_contact_email", "label": "Accounts Payable Contact Email", "type": "text", "required": false },
-    { "key": "ap_contact_phone", "label": "Accounts Payable Phone Number", "type": "text", "required": false }
+    {
+      "key": "client_name",
+      "label": "Client Name",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "project_name",
+      "label": "Project Name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "deliverables",
+      "label": "Deliverables",
+      "type": "multiselect",
+      "options": [],
+      "allow_custom": true,
+      "required": false
+    },
+    {
+      "key": "waternarks",
+      "label": "Waternarks",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "upload_destination",
+      "label": "Upload Destination",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "email_distribution_list",
+      "label": "Email Distribution List",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "primary_contact_name",
+      "label": "Primary Contact Name",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "primary_contact_title",
+      "label": "Primary Contact Title",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "project_location",
+      "label": "Project Location",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "project_address",
+      "label": "Project Address",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "project_frequency",
+      "label": "Project Frequency",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "project_duration",
+      "label": "Project Duration",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "ap_email",
+      "label": "AP Email",
+      "type": "text",
+      "required": false
+    },
+    {
+      "key": "ap_phone_number",
+      "label": "AP Phone Number",
+      "type": "text",
+      "required": false
+    }
   ],
   "xlsx": {
     "row_strategy": "single_row",
     "email_delimiter": ";"
+  },
+  "meta": {
+    "unmapped": [
+      {
+        "key": "client",
+        "label": "Client"
+      },
+      {
+        "key": "watermarks",
+        "label": "Watermark(s)"
+      },
+      {
+        "key": "deliverables_uploads",
+        "label": "Deliverables Upload(s)"
+      },
+      {
+        "key": "ops_contact_emails",
+        "label": "Operations Contact Email"
+      },
+      {
+        "key": "ops_contact_title",
+        "label": "Operations Contact Title"
+      },
+      {
+        "key": "ops_contact_name",
+        "label": "Name"
+      },
+      {
+        "key": "location",
+        "label": "Location"
+      },
+      {
+        "key": "survey_frequency",
+        "label": "Survey Frequency"
+      },
+      {
+        "key": "duration",
+        "label": "Duration"
+      },
+      {
+        "key": "ap_contact",
+        "label": "Accounts Payable Contact"
+      },
+      {
+        "key": "ap_contact_email",
+        "label": "Accounts Payable Contact Email"
+      },
+      {
+        "key": "ap_contact_phone",
+        "label": "Accounts Payable Phone Number"
+      }
+    ],
+    "source": "xlsx_template_headers"
   }
 }
