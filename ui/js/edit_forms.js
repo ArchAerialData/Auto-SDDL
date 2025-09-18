@@ -27,6 +27,8 @@
       const schema = JSON.parse(editor.value);
       await window.API.save_schema(schema);
       alert('Saved');
+      // Hard refresh so the Form tab re-renders with the latest schema
+      window.location.reload();
     } catch (err) {
       alert('Invalid JSON or save failed: ' + err);
     }
