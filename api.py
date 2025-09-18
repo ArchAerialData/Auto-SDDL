@@ -37,13 +37,29 @@ class LocalAPI:
         os.makedirs(folder or '.', exist_ok=True)
         xlsx_path = os.path.join(folder or '.', 'output.xlsx')
 
-        # Discover a template deterministically (explicit known names)
-        template_candidates = [
-            os.path.join(TEMPLATES_DIR, 'single-row-template.xlsx'),
-            os.path.join(TEMPLATES_DIR, 'SDDL-Template-Header-Fields.xlsx'),
-            os.path.join(TEMPLATES_DIR, 'xlsx_template.xlsx'),
-        ]
-        template_path = next((p for p in template_candidates if os.path.exists(p)), None)
+        # Discover an XLSX template deterministically from the templates folder.
+        # Policy:
+        # - If exactly one .xlsx exists, use it.
+        # - If multiple exist, prefer common names; else choose lexicographically first for stability.
+        template_path = None
+        try:
+            xlsx_files = [f for f in os.listdir(TEMPLATES_DIR) if f.lower().endswith('.xlsx')]
+        except FileNotFoundError:
+            xlsx_files = []
+        if len(xlsx_files) == 1:
+            template_path = os.path.join(TEMPLATES_DIR, xlsx_files[0])
+        elif len(xlsx_files) > 1:
+            preferred = [
+                'xlsx_template.xlsx',
+                'table.xlsx',
+                'single-row-template.xlsx',
+                'sddl-template-header-fields.xlsx',
+            ]
+            lower_map = {f.lower(): f for f in xlsx_files}
+            picked = next((lower_map[name] for name in preferred if name in lower_map), None)
+            if picked is None:
+                picked = sorted(xlsx_files, key=lambda s: s.lower())[0]
+            template_path = os.path.join(TEMPLATES_DIR, picked)
 
         # Load schema for labels/keys mapping (best-effort; fallback to data keys)
         try:
