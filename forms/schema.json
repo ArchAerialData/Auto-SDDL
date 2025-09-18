@@ -1,12 +1,25 @@
 {
   "title": "FormGen",
-  "version": 1,
+  "version": 2,
   "fields": [
-    { "key": "site_name", "label": "Site Name", "type": "text", "required": true },
-    { "key": "inspection_date", "label": "Inspection Date", "type": "date", "required": true },
-    { "key": "inspector", "label": "Inspector", "type": "text", "required": true },
-    { "key": "priority", "label": "Priority", "type": "select", "options": ["Low", "Medium", "High"], "required": false },
-    { "key": "notes", "label": "Notes", "type": "textarea", "required": false }
-  ]
+    { "key": "client", "label": "Client", "type": "text", "required": true },
+    { "key": "project_name", "label": "Project Name", "type": "text", "required": true },
+    { "key": "deliverables", "label": "Deliverables", "type": "textarea", "required": false },
+    { "key": "watermarks", "label": "Watermark(s)", "type": "text", "required": false },
+    { "key": "deliverables_uploads", "label": "Deliverables Upload(s)", "type": "textarea", "required": false },
+    { "key": "ops_contact_emails", "label": "Operations Contact Email", "type": "textarea", "placeholder": "Separate multiple emails with ';' or ','", "required": false },
+    { "key": "ops_contact_title", "label": "Operations Contact Title", "type": "text", "required": false },
+    { "key": "ops_contact_name", "label": "Name", "type": "text", "required": false },
+    { "key": "location", "label": "Location", "type": "text", "required": false },
+    { "key": "project_address", "label": "Project Address", "type": "text", "required": false },
+    { "key": "survey_frequency", "label": "Survey Frequency", "type": "text", "placeholder": "TODO(Owner): define options if constrained", "required": false },
+    { "key": "duration", "label": "Duration", "type": "text", "required": false },
+    { "key": "ap_contact", "label": "Accounts Payable Contact", "type": "text", "required": false },
+    { "key": "ap_contact_email", "label": "Accounts Payable Contact Email", "type": "text", "required": false },
+    { "key": "ap_contact_phone", "label": "Accounts Payable Phone Number", "type": "text", "required": false }
+  ],
+  "xlsx": {
+    "row_strategy": "single_row",
+    "email_delimiter": ";"
+  }
 }
-

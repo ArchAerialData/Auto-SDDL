@@ -3,6 +3,7 @@
   const outputEl = document.getElementById('output-folder');
   const btnGen = document.getElementById('btn-generate');
   const btnOpen = document.getElementById('btn-open-folder');
+  let currentSchema = null;
 
   // Simple sidebar switching
   document.querySelectorAll('#sidebar a').forEach(a => {
@@ -29,12 +30,14 @@
       input = document.createElement('input'); input.type = f.type || 'text';
     }
     input.id = f.key; input.required = !!f.required; input.className = 'form-control';
+    if (f.placeholder) input.placeholder = f.placeholder;
     wrap.appendChild(label); wrap.appendChild(input);
     return wrap;
   }
 
   async function loadSchema() {
     const schema = await window.API.get_schema();
+    currentSchema = schema || {};
     formEl.innerHTML = '';
     (schema.fields || []).forEach(f => formEl.appendChild(renderField(f)));
   }
@@ -42,7 +45,28 @@
   btnGen.addEventListener('click', async (e) => {
     e.preventDefault();
     const data = {};
-    formEl.querySelectorAll('input,select,textarea').forEach(el => { data[el.id] = el.value; });
+    const missing = [];
+    formEl.querySelectorAll('input,select,textarea').forEach(el => {
+      const val = (el.value || '').trim();
+      data[el.id] = val;
+      if (el.required && !val) missing.push(el.id);
+    });
+
+    if (missing.length) {
+      alert('Please fill required fields: ' + missing.join(', '));
+      return;
+    }
+
+    // Normalize multiple emails into a single cell if present
+    const emailKey = 'ops_contact_emails';
+    if (emailKey in data) {
+      const delim = (currentSchema && currentSchema.xlsx && currentSchema.xlsx.email_delimiter) || ';';
+      const parts = data[emailKey]
+        .split(/[,;\n]+/)
+        .map(s => s.trim())
+        .filter(Boolean);
+      data[emailKey] = parts.join(delim + ' ');
+    }
     const folder = outputEl.value || '';
     const x = await window.API.generate_xlsx(data, folder);
     const d = await window.API.generate_docx(data, folder);
@@ -57,4 +81,3 @@
 
   loadSchema();
 })();
-
