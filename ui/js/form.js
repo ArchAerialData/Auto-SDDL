@@ -42,9 +42,20 @@
       formEl.innerHTML = '';
       (schema.fields || []).forEach(f => formEl.appendChild(renderField(f)));
     } catch (err) {
-      console.error('Failed to load schema:', err);
-      formEl.innerHTML = '<div class="text-danger">Failed to load schema. Waiting for API…</div>';
-      setTimeout(() => whenApiReady(loadSchema), 300);
+      console.error('Failed to load schema via API:', err);
+      // Fallback: fetch the JSON directly when running with http_server
+      try {
+        const resp = await fetch('../forms/schema.json');
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const schema = await resp.json();
+        currentSchema = schema || {};
+        formEl.innerHTML = '';
+        (schema.fields || []).forEach(f => formEl.appendChild(renderField(f)));
+      } catch (e2) {
+        console.error('Fallback fetch failed:', e2);
+        formEl.innerHTML = '<div class="text-danger">Failed to load schema. Waiting for API…</div>';
+        setTimeout(() => whenApiReady(loadSchema), 500);
+      }
     }
   }
 
