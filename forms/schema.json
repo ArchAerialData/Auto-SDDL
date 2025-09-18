@@ -23,15 +23,17 @@
       "required": false
     },
     {
-      "key": "waternarks",
-      "label": "Waternarks",
+      "key": "watermarks",
+      "label": "Watermarks",
       "type": "text",
       "required": false
     },
     {
-      "key": "upload_destination",
-      "label": "Upload Destination",
-      "type": "text",
+      "key": "upload_deliverables",
+      "label": "Upload Deliverables",
+      "type": "multiselect",
+      "options": ["Dropbox", "Procore", "DroneDeploy", "Drone Work Advisor"],
+      "allow_custom": true,
       "required": false
     },
     {
