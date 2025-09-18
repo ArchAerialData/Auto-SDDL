@@ -4,8 +4,14 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.utils import range_boundaries, get_column_letter
 from docx import Document
 
-SCHEMA_PATH = os.path.join('forms', 'schema.json')
-TEMPLATES_DIR = 'templates'
+def _base_dir():
+    if getattr(sys, 'frozen', False):  # PyInstaller onefile/onedir
+        return getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))  # type: ignore[attr-defined]
+    return os.path.abspath(os.path.dirname(__file__))
+
+BASE_DIR = _base_dir()
+SCHEMA_PATH = os.path.join(BASE_DIR, 'forms', 'schema.json')
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 
 class LocalAPI:
